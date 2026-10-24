@@ -1,0 +1,35 @@
+{
+  "modoBorrador": true,
+  "nombre": "Caridad Franciscana",
+  "subtitulo": "Orden Franciscana Seglar · Región de La Laguna",
+  "lema": "Paz y Bien",
+  "sede": "Parroquia de San Felipe de Jesús",
+  "direccion": "Serapio Santiago 126, Amp. Los Ángeles, 27148 Torreón, Coah.",
+  "whatsapp": "",
+  "correo": "",
+  "facebook": "",
+  "instagram": "",
+  "reuniones": [
+    {
+      "titulo": "Reunión fraterna",
+      "dia": "Sábados",
+      "hora": "17:00 h",
+      "lugar": "Salón parroquial",
+      "descripcion": "Oración, formación y convivencia. Abierta a quien quiera conocernos."
+    },
+    {
+      "titulo": "Formación permanente",
+      "dia": "Primer sábado de cada mes",
+      "hora": "18:30 h",
+      "lugar": "Salón parroquial",
+      "descripcion": "Estudio de la Regla, los escritos de San Francisco y la doctrina de la Iglesia."
+    },
+    {
+      "titulo": "Eucaristía en fraternidad",
+      "dia": "Último domingo de cada mes",
+      "hora": "12:00 h",
+      "lugar": "Templo de San Felipe de Jesús",
+      "descripcion": "Celebramos juntos la misa y después compartimos un café."
+    }
+  ]
+}

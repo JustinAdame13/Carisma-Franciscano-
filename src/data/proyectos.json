@@ -1,0 +1,28 @@
+{
+  "proyectos": [
+    {
+      "nombre": "Despensa Fraterna",
+      "frecuencia": "Cada mes",
+      "descripcion": "Reunimos víveres y armamos despensas para familias de la colonia que atraviesan un momento difícil. Las entregamos en persona, con tiempo para platicar y orar con ellas.",
+      "comoAyudar": "Puedes donar alimentos no perecederos o ayudarnos a armar y entregar las despensas."
+    },
+    {
+      "nombre": "Visita a Enfermos y Adultos Mayores",
+      "frecuencia": "Cada semana",
+      "descripcion": "Visitamos a personas enfermas o que viven solas. Llevamos compañía, escucha y oración; cuando lo piden, coordinamos con el párroco para que reciban la comunión.",
+      "comoAyudar": "Acompáñanos en una visita o avísanos de alguien que necesite compañía."
+    },
+    {
+      "nombre": "Colecta de Invierno",
+      "frecuencia": "Noviembre a enero",
+      "descripcion": "Las noches en La Laguna pueden ser muy frías. Recolectamos cobijas, chamarras y ropa abrigadora para personas en situación de calle y familias que lo necesitan.",
+      "comoAyudar": "Dona cobijas o ropa abrigadora en buen estado, o súmate a las jornadas de entrega."
+    },
+    {
+      "nombre": "Huerto de San Francisco",
+      "frecuencia": "Sábados por la mañana",
+      "descripcion": "Un pequeño huerto parroquial donde aprendemos a cuidar la creación. Lo que cosechamos se comparte en las despensas.",
+      "comoAyudar": "Ven a trabajar la tierra con nosotros; no necesitas experiencia."
+    }
+  ]
+}

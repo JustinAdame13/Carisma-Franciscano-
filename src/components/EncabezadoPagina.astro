@@ -1,0 +1,24 @@
+---
+// Encabezado de cada página interior: etiqueta, título, descripción y (opcional) contenido a la derecha.
+import Icono from './Icono.astro';
+interface Props {
+  etiqueta: string;
+  icono?: string;
+  titulo: string;
+  descripcion?: string;
+}
+const { etiqueta, icono = 'eco', titulo, descripcion } = Astro.props;
+const tieneLado = Astro.slots.has('lado');
+---
+<section class="relative overflow-hidden bg-surface-container-low">
+  <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/5 via-tertiary-fixed/15 to-transparent"></div>
+  <div class:list={['contenedor relative grid items-center gap-space-xl py-space-xl lg:py-space-2xl', tieneLado && 'lg:grid-cols-12']}>
+    <div class:list={['flex flex-col items-start gap-space-md', tieneLado && 'lg:col-span-7']}>
+      <span class="chip chip-olivo"><Icono nombre={icono} class="text-[16px]" />{etiqueta}</span>
+      <h1 class="max-w-[20ch] text-display-lg-mobile md:text-display-lg">{titulo}</h1>
+      {descripcion && <p class="max-w-[62ch] text-body-lg text-on-surface-variant">{descripcion}</p>}
+      <slot />
+    </div>
+    {tieneLado && <div class="lg:col-span-5"><slot name="lado" /></div>}
+  </div>
+</section>

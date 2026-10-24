@@ -1,0 +1,57 @@
+---
+// Plantilla para leer una noticia o publicación completa, como un artículo de revista.
+import Base from './Base.astro';
+import Lineas from '../components/Lineas.astro';
+import Tau from '../components/Tau.astro';
+import Invitacion from '../components/Invitacion.astro';
+import { formatoFecha } from '../lib/utilidades';
+
+interface Props {
+  titulo: string;
+  resumen: string;
+  fecha: Date;
+  etiqueta: string;
+  imagen?: string | null;
+  ejemplo?: boolean;
+  archivo?: string | null;
+  volver: { texto: string; href: string };
+}
+const { titulo, resumen, fecha, etiqueta, imagen, ejemplo, archivo, volver } = Astro.props;
+---
+<Base titulo={titulo} descripcion={resumen}>
+  <article>
+    <header class="contenedor pt-10 pb-14 md:pt-16">
+      <a href={volver.href} class="rotulo text-tinta-suave transition-colors hover:text-rubrica" data-revelar>← {volver.texto}</a>
+      <div class="mx-auto mt-14 max-w-[960px] text-center">
+        <p class="rotulo text-rubrica" data-revelar>
+          {etiqueta} <span class="mx-2 text-tinta-tenue">·</span> <time datetime={fecha.toISOString()} class="text-tinta-suave">{formatoFecha(fecha)}</time>
+          {ejemplo && <span class="ml-2 text-tinta-tenue">· contenido de ejemplo</span>}
+        </p>
+        <Lineas as="h1" class="display-l mt-8" lineas={[titulo]} />
+        <p class="lede mx-auto mt-8 max-w-[48ch]" data-revelar style="--i:2">{resumen}</p>
+        <Tau trazar class="mx-auto mt-12 h-8 w-auto text-rubrica" />
+      </div>
+    </header>
+
+    {imagen && (
+      <div class="contenedor" data-revelar>
+        <div class="parallax aspect-[16/9] overflow-hidden"><img src={imagen} alt="" class="h-full w-full object-cover" /></div>
+      </div>
+    )}
+
+    <div class="contenedor pt-14 pb-10">
+      <div class="prosa mx-auto" data-revelar>
+        <slot />
+      </div>
+      {archivo && (
+        <div class="mx-auto mt-12 max-w-[66ch]">
+          <a href={archivo} class="boton" download>Descargar documento (PDF)</a>
+        </div>
+      )}
+      <div class="mx-auto mt-16 max-w-[66ch] border-t border-tinta/15 pt-6">
+        <a href={volver.href} class="enlace-flecha">{volver.texto}</a>
+      </div>
+    </div>
+  </article>
+  <Invitacion />
+</Base>

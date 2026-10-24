@@ -1,0 +1,133 @@
+---
+import Tau from './Tau.astro';
+import sitio from '../data/sitio.json';
+import { navegacion } from '../data/navegacion';
+
+const ruta = Astro.url.pathname.replace(/\/$/, '') || '/';
+const esActiva = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(href));
+---
+{sitio.modoBorrador && (
+  <p class="bg-tinta py-1.5 text-center font-ui text-[0.7rem] tracking-[0.08em] text-papel/80">
+    Sitio en construcción — algunos textos y datos son de ejemplo.
+  </p>
+)}
+
+<!-- Cabecera tipo revista (mancheta) -->
+<header id="mancheta" class="contenedor">
+  <div class="hidden grid-cols-3 items-center border-b border-tinta/15 py-2.5 md:grid">
+    <p class="rotulo text-tinta-suave">Torreón, Coahuila</p>
+    <p class="rotulo text-center text-tinta-suave">{sitio.subtitulo}</p>
+    <p class="rotulo text-right text-rubrica">{sitio.lema}</p>
+  </div>
+  <div class="flex items-center justify-between py-5 md:justify-center md:py-8">
+    <a href="/" class="group flex items-center gap-3 md:flex-col md:gap-4" aria-label={`${sitio.nombre}, inicio`}>
+      <Tau trazar class="h-9 w-auto text-rubrica md:h-12" />
+      <span class="font-display text-[1.6rem] leading-none tracking-[-0.02em] md:text-[clamp(2.4rem,4.5vw,3.6rem)]" style="font-weight:380">
+        Caridad <em class="italic" style="font-weight:330">Franciscana</em>
+      </span>
+    </a>
+    <button
+      id="abrir-menu"
+      type="button"
+      class="rotulo flex items-center gap-2 py-2 text-tinta md:hidden"
+      aria-controls="menu-completo"
+      aria-expanded="false"
+    >
+      Menú <span class="flex flex-col gap-[5px]" aria-hidden="true"><span class="block h-px w-6 bg-tinta"></span><span class="block h-px w-6 bg-tinta"></span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Barra de secciones: se queda fija al hacer scroll -->
+<nav id="barra" class="sticky top-0 z-40 hidden border-y border-tinta bg-papel/90 backdrop-blur-md transition-shadow duration-500 md:block" aria-label="Principal">
+  <div class="contenedor relative flex h-12 items-center justify-center">
+    <a href="/" id="mini-logo" class="absolute left-5 flex items-center gap-2 opacity-0 transition-all duration-500 ease-[var(--ease-suave)] -translate-x-2 pointer-events-none sm:left-8 lg:left-12" tabindex="-1" aria-hidden="true">
+      <Tau class="h-5 w-auto text-rubrica" />
+      <span class="hidden font-display text-[1.05rem] 2xl:inline">Caridad Franciscana</span>
+    </a>
+    <ul class="flex items-center gap-1 lg:gap-3">
+      {navegacion.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            aria-current={esActiva(item.href) ? 'page' : undefined}
+            class:list={[
+              'nav-enlace relative block px-1.5 py-1 font-ui text-[0.68rem] lg:text-[0.74rem] font-semibold tracking-[0.13em] uppercase transition-colors lg:px-2.5',
+              esActiva(item.href) ? 'text-rubrica' : 'text-tinta hover:text-rubrica',
+            ]}
+          >
+            {item.texto}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<!-- Menú de pantalla completa (celular) -->
+<div id="menu-completo" class="fixed inset-0 z-50 hidden flex-col bg-noche text-papel" role="dialog" aria-modal="true" aria-label="Menú">
+  <div class="contenedor flex items-center justify-between py-5">
+    <span class="flex items-center gap-3">
+      <Tau class="h-8 w-auto text-rubrica" />
+      <span class="font-display text-[1.5rem]">Caridad <em>Franciscana</em></span>
+    </span>
+    <button id="cerrar-menu" type="button" class="rotulo py-2 text-papel">Cerrar ✕</button>
+  </div>
+  <ul class="contenedor mt-6 flex flex-1 flex-col justify-center gap-1 pb-16">
+    {navegacion.map((item, i) => (
+      <li class="menu-item border-t border-papel/15" style={`--i:${i}`}>
+        <a href={item.href} class:list={['flex items-baseline gap-4 py-3', esActiva(item.href) && 'text-rubrica']}>
+          <span class="numeral w-8 text-[0.9rem] text-rubrica">{item.numero}</span>
+          <span class="font-display text-[2.1rem] leading-none tracking-[-0.02em]">{item.texto}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .nav-enlace::after {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: -1px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s var(--ease-suave);
+  }
+  .nav-enlace:hover::after,
+  .nav-enlace[aria-current='page']::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  #barra.fija {
+    box-shadow: 0 10px 30px -18px rgb(31 27 22 / 0.35);
+  }
+  #barra.fija #mini-logo {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .menu-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s var(--ease-suave), transform 0.8s var(--ease-suave);
+      transition-delay: calc(var(--i) * 55ms + 120ms);
+    }
+    #menu-completo.abierto .menu-item {
+      opacity: 1;
+      transform: none;
+    }
+    #menu-completo {
+      clip-path: inset(0 0 100% 0);
+      transition: clip-path 0.7s var(--ease-suave);
+    }
+    #menu-completo.abierto {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+</style>

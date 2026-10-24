@@ -1,0 +1,25 @@
+---
+import { getCollection, render } from 'astro:content';
+import Entrada from '../../layouts/Entrada.astro';
+
+// Genera una página por cada archivo .md de la colección.
+export async function getStaticPaths() {
+  const entradas = await getCollection('noticias');
+  return entradas.map((entrada) => ({ params: { slug: entrada.id }, props: { entrada } }));
+}
+
+const { entrada } = Astro.props;
+const { Content } = await render(entrada);
+---
+<Entrada
+  titulo={entrada.data.titulo}
+  resumen={entrada.data.resumen}
+  fecha={entrada.data.fecha}
+  etiqueta={entrada.data.categoria}
+  imagen={entrada.data.imagen}
+  ejemplo={entrada.data.ejemplo}
+  
+  volver={{ texto: 'Volver a Noticias', href: '/noticias' }}
+>
+  <Content />
+</Entrada>

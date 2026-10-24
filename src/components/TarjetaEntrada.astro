@@ -1,0 +1,35 @@
+---
+// Tarjeta para listar una noticia o publicación.
+import Icono from './Icono.astro';
+import { formatoFecha } from '../lib/utilidades';
+interface Props {
+  href: string;
+  titulo: string;
+  fecha: Date;
+  resumen: string;
+  etiqueta: string;
+  imagen?: string | null;
+  ejemplo?: boolean;
+}
+const { href, titulo, fecha, resumen, etiqueta, imagen, ejemplo } = Astro.props;
+---
+<article class="group flex flex-col overflow-hidden rounded-2xl border border-primary/[0.06] bg-surface-container-lowest transition-shadow hover:shadow-warm">
+  <a href={href} class="flex h-full flex-col">
+    {imagen ? (
+      <img src={imagen} alt="" class="aspect-[16/9] w-full object-cover" loading="lazy" />
+    ) : (
+      <div class="flex aspect-[16/9] items-center justify-center bg-gradient-to-br from-[#ede6e0] to-surface-container">
+        <Icono nombre={etiqueta === 'Evento' ? 'event' : 'eco'} class="text-[40px] text-primary-container/40" />
+      </div>
+    )}
+    <div class="flex flex-1 flex-col gap-3 p-6">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="chip chip-dorado">{etiqueta}</span>
+        {ejemplo && <span class="chip chip-sayal">Ejemplo</span>}
+      </div>
+      <h3 class="text-headline-sm group-hover:underline group-hover:decoration-tertiary-accent group-hover:underline-offset-4">{titulo}</h3>
+      <p class="flex-1 text-body-sm text-on-surface-variant">{resumen}</p>
+      <time datetime={fecha.toISOString()} class="text-label-md text-[#8a6428]">{formatoFecha(fecha)}</time>
+    </div>
+  </a>
+</article>

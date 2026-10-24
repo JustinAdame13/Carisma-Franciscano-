@@ -1,0 +1,17 @@
+---
+// Rótulo de sección: número en rojo rúbrica + nombre, sobre una línea fina.
+interface Props {
+  numero?: string;
+  texto: string;
+  class?: string;
+  claro?: boolean;
+}
+const { numero, texto, class: clase, claro = false } = Astro.props;
+---
+<div class:list={['flex flex-col gap-3', clase]}>
+  <span class:list={['regla', claro && 'bg-papel/25!']} data-regla></span>
+  <p class:list={['rotulo flex items-baseline gap-3', claro ? 'text-papel/70' : 'text-tinta-suave']} data-revelar>
+    {numero && <span class="text-rubrica">{numero}</span>}
+    <span>{texto}</span>
+  </p>
+</div>

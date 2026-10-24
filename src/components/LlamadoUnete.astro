@@ -1,0 +1,31 @@
+---
+// Bloque de invitación que se repite al final de varias páginas.
+import Icono from './Icono.astro';
+import Tau from './Tau.astro';
+interface Props {
+  titulo?: string;
+  texto?: string;
+}
+const {
+  titulo = '¿Sientes que este camino es para ti?',
+  texto = 'No necesitas saber nada ni tener todo resuelto. Ven a una de nuestras reuniones: te recibimos como hermano.',
+} = Astro.props;
+---
+<section class="contenedor mt-space-2xl">
+  <div class="relative overflow-hidden rounded-2xl bg-primary-container px-6 py-space-xl text-on-primary shadow-warm sm:px-space-xl lg:py-space-2xl">
+    <Tau class="pointer-events-none absolute -right-8 -bottom-10 h-72 w-auto text-white/[0.05]" />
+    <div class="relative max-w-[60ch]">
+      <span class="chip bg-tertiary-fixed text-on-tertiary-fixed-variant"><Icono nombre="favorite" class="text-[16px]" />Puertas abiertas</span>
+      <h2 class="mt-4 text-headline-lg-mobile text-on-primary md:text-headline-lg">{titulo}</h2>
+      <p class="mt-3 text-body-lg text-on-primary/85">{texto}</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="/contacto" class="btn bg-surface text-primary hover:bg-surface-container-low">
+          <Icono nombre="waving_hand" class="text-[18px]" /> Quiero conocerlos
+        </a>
+        <a href="/formacion" class="btn border border-white/25 text-on-primary hover:bg-white/10">
+          ¿Cómo me integro?
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+---
+// Espacio reservado para una foto que la fraternidad todavía no envía.
+// Cuando tengas la foto, reemplaza este componente por <img src="/imagenes/..." alt="..." />.
+import Icono from './Icono.astro';
+import Tau from './Tau.astro';
+interface Props {
+  descripcion: string;
+  class?: string;
+}
+const { descripcion, class: clase = 'aspect-[4/3]' } = Astro.props;
+---
+<div
+  class:list={['relative flex w-full flex-col items-center justify-center gap-3 overflow-hidden rounded-2xl bg-gradient-to-br from-[#ede6e0] via-surface-container to-secondary-container/60 p-6 text-center', clase]}
+  role="img"
+  aria-label={`Espacio para foto: ${descripcion}`}
+>
+  <Tau class="pointer-events-none absolute -right-6 -bottom-8 h-48 w-auto text-primary/[0.05]" />
+  <span class="flex h-12 w-12 items-center justify-center rounded-full bg-surface-container-lowest/80 text-primary-container shadow-sm">
+    <Icono nombre="photo_camera" class="text-[22px]" />
+  </span>
+  <span class="text-label-sm uppercase text-primary-container">Foto pendiente</span>
+  <span class="max-w-[28ch] text-body-sm text-on-surface-variant">{descripcion}</span>
+</div>

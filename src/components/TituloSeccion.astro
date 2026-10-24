@@ -1,0 +1,15 @@
+---
+interface Props {
+  etiqueta?: string;
+  titulo: string;
+  descripcion?: string;
+  centrado?: boolean;
+  estiloEtiqueta?: 'olivo' | 'dorado' | 'sayal';
+}
+const { etiqueta, titulo, descripcion, centrado = false, estiloEtiqueta = 'sayal' } = Astro.props;
+---
+<div class:list={['flex flex-col gap-3', centrado ? 'items-center text-center' : 'items-start']}>
+  {etiqueta && <span class:list={['chip uppercase', `chip-${estiloEtiqueta}`]}>{etiqueta}</span>}
+  <h2 class="text-headline-lg-mobile md:text-headline-lg">{titulo}</h2>
+  {descripcion && <p class:list={['max-w-[65ch] text-body-md text-on-surface-variant', centrado && 'mx-auto']}>{descripcion}</p>}
+</div>

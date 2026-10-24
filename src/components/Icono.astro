@@ -1,0 +1,29 @@
+---
+// Ícono de Material Symbols (Google) incrustado como SVG al construir el sitio.
+// No descarga ninguna fuente: solo se incluye el dibujo de los íconos que usas.
+// Usa el mismo nombre que en https://fonts.google.com/icons (ej. "location_on").
+// El tamaño se controla con clases de texto, por ejemplo text-[20px].
+import { getIconData, iconToSVG, replaceIDs } from '@iconify/utils';
+import iconos from '@iconify-json/material-symbols/icons.json';
+
+interface Props {
+  nombre: string;
+  class?: string;
+}
+const { nombre, class: clase = 'text-[20px]' } = Astro.props;
+
+const base = nombre.replace(/_/g, '-');
+const candidato = [`${base}-outline`, base, `${base}-rounded`].find((n) => getIconData(iconos as any, n));
+if (!candidato) throw new Error(`Ícono no encontrado: ${nombre}`);
+const svg = iconToSVG(getIconData(iconos as any, candidato)!, { height: '1em' });
+const cuerpo = replaceIDs(svg.body);
+---
+<svg
+  class:list={['icono inline-block shrink-0', clase]}
+  {...svg.attributes}
+  width="1em"
+  height="1em"
+  fill="currentColor"
+  aria-hidden="true"
+  set:html={cuerpo}
+/>

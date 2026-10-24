@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import Tau from '../components/Tau.astro';
+import Lineas from '../components/Lineas.astro';
+---
+<Base titulo="Página no encontrada">
+  <section class="contenedor py-24 md:py-36">
+    <Tau trazar class="h-16 w-auto text-rubrica" />
+    <p class="numeral mt-10 text-[clamp(5rem,14vw,12rem)] leading-[0.8]" data-revelar>404</p>
+    <Lineas as="h1" class="display-l mt-8" lineas={['Esta página', 'no *existe*.']} />
+    <p class="lede mt-8 max-w-[44ch]" data-revelar style="--i:2">Quizá el enlace cambió. Pero siempre hay un camino de regreso a casa.</p>
+    <a href="/" class="boton mt-10" data-revelar style="--i:3">Volver al inicio</a>
+  </section>
+</Base>

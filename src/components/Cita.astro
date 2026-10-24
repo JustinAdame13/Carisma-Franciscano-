@@ -1,0 +1,22 @@
+---
+// Cita destacada (pull quote).
+interface Props {
+  autor?: string;
+  class?: string;
+  tamano?: 'normal' | 'grande';
+}
+const { autor, class: clase, tamano = 'normal' } = Astro.props;
+---
+<figure class:list={['relative', clase]} data-revelar>
+  <span class="pointer-events-none absolute top-0 left-0 -translate-x-[0.08em] font-display text-[4.5rem] leading-none text-rubrica/80 select-none" aria-hidden="true">«</span>
+  <blockquote
+    class:list={[
+      'relative pt-[3.6rem] font-display italic text-current',
+      tamano === 'grande' ? 'text-[clamp(1.9rem,4.2vw,3.6rem)] leading-[1.08] tracking-[-0.02em]' : 'text-[clamp(1.35rem,2.2vw,1.8rem)] leading-[1.25]',
+    ]}
+    style="font-weight: 340"
+  >
+    <slot />
+  </blockquote>
+  {autor && <figcaption class="rotulo mt-5 opacity-70">— {autor}</figcaption>}
+</figure>

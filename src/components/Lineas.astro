@@ -1,0 +1,17 @@
+---
+// Titular que se revela línea por línea.
+// Uso: <Lineas as="h1" class="display-xl" lineas={['Vivir el', 'Evangelio']} />
+// Para poner una palabra en cursiva roja, envuélvela en *asteriscos*.
+interface Props {
+  lineas: string[];
+  as?: 'h1' | 'h2' | 'h3' | 'p';
+  class?: string;
+}
+const { lineas, as: Etiqueta = 'h2', class: clase } = Astro.props;
+const html = (t: string) => t.replace(/\*(.+?)\*/g, '<em class="cursiva">$1</em>');
+---
+<Etiqueta class:list={['lineas', clase]} data-observar aria-label={lineas.join(' ').replace(/\*/g, '')}>
+  {lineas.map((l, i) => (
+    <span class="linea" aria-hidden="true" style={`--l:${i}`}><span set:html={html(l)} /></span>
+  ))}
+</Etiqueta>

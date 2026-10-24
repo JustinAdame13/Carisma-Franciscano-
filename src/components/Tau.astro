@@ -1,0 +1,25 @@
+---
+// Tau franciscana. Con `trazar`, se dibuja sola al aparecer en pantalla.
+// Toma el color del texto (currentColor).
+interface Props {
+  class?: string;
+  titulo?: string;
+  trazar?: boolean;
+}
+const { class: clase = 'h-8 w-auto', titulo, trazar = false } = Astro.props;
+---
+<svg
+  class={clase}
+  viewBox="0 0 40 48"
+  fill="currentColor"
+  stroke={trazar ? 'currentColor' : undefined}
+  stroke-width={trazar ? '0.8' : undefined}
+  stroke-linejoin="round"
+  role={titulo ? 'img' : undefined}
+  aria-hidden={titulo ? undefined : 'true'}
+  aria-label={titulo}
+  data-trazar={trazar ? '' : undefined}
+  style={trazar ? '--largo: 100' : undefined}
+>
+  <path pathLength="100" d="M3 5.5C12 8 28 8 37 5.5L35.6 13.2C31 12.2 26.6 12 23.4 12.3L24.3 39.5C24.5 42 26.5 43.8 29.5 45H10.5C13.5 43.8 15.5 42 15.7 39.5L16.6 12.3C13.4 12 9 12.2 4.4 13.2Z" />
+</svg>

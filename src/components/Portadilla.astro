@@ -1,0 +1,26 @@
+---
+// Encabezado de cada página interior, como la portadilla de un capítulo.
+import Lineas from './Lineas.astro';
+import { seccion } from '../data/navegacion';
+interface Props {
+  href: string;
+  lineas: string[];
+  entrada?: string;
+}
+const { href, lineas, entrada } = Astro.props;
+const { numero, texto } = seccion(href);
+---
+<header class="contenedor pt-10 pb-16 md:pt-16 md:pb-24">
+  <div class="grid gap-y-8 md:grid-cols-12 md:gap-x-8">
+    <div class="md:col-span-3">
+      <p class="numeral text-[clamp(4.5rem,11vw,10rem)] leading-[0.8] tracking-[-0.04em]" data-revelar>{numero}</p>
+      <p class="rotulo mt-4 text-tinta-suave" data-revelar style="--i:1">{texto}</p>
+    </div>
+    <div class="md:col-span-9">
+      <Lineas as="h1" class="display-l" lineas={lineas} />
+      {entrada && <p class="lede mt-8 max-w-[42ch]" data-revelar style="--i:3">{entrada}</p>}
+      <slot />
+    </div>
+  </div>
+  <span class="regla-fuerte mt-14 block" data-regla></span>
+</header>

@@ -1,0 +1,172 @@
+---
+import Base from '../layouts/Base.astro';
+import Portadilla from '../components/Portadilla.astro';
+import Rubro from '../components/Rubro.astro';
+import sitio from '../data/sitio.json';
+import { enlaceWhatsApp, enlaceMapa, mapaEmbed } from '../lib/utilidades';
+
+const whatsapp = enlaceWhatsApp();
+const [calle, ...resto] = sitio.direccion.split(',');
+const numeroWhatsApp = sitio.whatsapp.replace(/\D/g, '');
+
+// "Pedir oración" reemplaza al muro de intenciones del diseño original.
+const motivos = [
+  'Quiero conocer la fraternidad',
+  'Quiero que alguien me reciba en mi primera visita',
+  'Quiero pedir oración por una intención',
+  'Quiero ayudar en un proyecto',
+  'Otro',
+];
+---
+<Base titulo="Contacto" descripcion="Visítanos en la Parroquia de San Felipe de Jesús, Torreón. Horarios de reunión y formas de contactar a Caridad Franciscana.">
+  <Portadilla
+    href="/contacto"
+    lineas={['Nos encantará', '*conocerte*.']}
+    entrada="Escríbenos, pide oración por una intención o simplemente ven a una reunión. No necesitas cita: te recibimos como hermano."
+  />
+
+  <!-- Dirección como titular -->
+  <section class="contenedor">
+    <div class="grid gap-12 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-4"><Rubro numero="I" texto="Dónde" /></div>
+      <div class="md:col-span-8">
+        <p class="rotulo text-rubrica" data-revelar>{sitio.sede}</p>
+        <a href={enlaceMapa} target="_blank" rel="noopener" class="group mt-4 block" data-revelar style="--i:1">
+          <span class="display-l block transition-colors duration-500 group-hover:text-rubrica">{calle}</span>
+          <span class="lede mt-3 block">{resto.join(',').trim()}</span>
+        </a>
+        <div class="mt-8" data-revelar style="--i:2">
+          <a href={enlaceMapa} target="_blank" rel="noopener" class="enlace-flecha">Abrir en Google Maps</a>
+        </div>
+      </div>
+    </div>
+
+    <figure class="mt-16 overflow-hidden border border-tinta/15" data-revelar>
+      <iframe
+        src={mapaEmbed}
+        title={`Mapa: ${sitio.sede}`}
+        class="mapa h-[420px] w-full"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </figure>
+  </section>
+
+  <!-- Horarios -->
+  <section id="horarios" class="contenedor pt-28 md:pt-36">
+    <div class="grid gap-12 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-4"><Rubro numero="II" texto="Cuándo" /></div>
+      <div class="md:col-span-8">
+        {sitio.reuniones.map((r, i) => (
+          <div class="grid gap-x-8 gap-y-2 border-t border-tinta/15 py-7 sm:grid-cols-[1fr_auto]" data-revelar style={`--i:${i}`}>
+            <div>
+              <h2 class="subtitulo">{r.titulo}</h2>
+              <p class="mt-2 max-w-[48ch] text-tinta-suave">{r.descripcion}</p>
+              <p class="rotulo mt-3 text-tinta-tenue">{r.lugar}</p>
+            </div>
+            <div class="sm:text-right">
+              <p class="numeral text-[2.4rem] leading-none">{r.hora}</p>
+              <p class="rotulo mt-2 text-tinta-suave">{r.dia}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Formulario -->
+  <section class="contenedor pt-28 md:pt-36">
+    <div class="grid gap-12 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-4">
+        <Rubro numero="III" texto="Escríbenos" />
+        <p class="mt-6 max-w-[34ch] text-tinta-suave" data-revelar>
+          También puedes confiarnos una intención: la presentaremos en la oración de nuestra próxima reunión.
+        </p>
+        <ul class="mt-8 space-y-2" data-revelar style="--i:1">
+          <li>{whatsapp ? <a href={whatsapp} target="_blank" rel="noopener" class="enlace">WhatsApp</a> : <span class="italic text-tinta-tenue">WhatsApp — próximamente</span>}</li>
+          <li>{sitio.correo ? <a href={`mailto:${sitio.correo}`} class="enlace">{sitio.correo}</a> : <span class="italic text-tinta-tenue">Correo — próximamente</span>}</li>
+          {sitio.facebook && <li><a href={sitio.facebook} target="_blank" rel="noopener" class="enlace">Facebook</a></li>}
+          {sitio.instagram && <li><a href={sitio.instagram} target="_blank" rel="noopener" class="enlace">Instagram</a></li>}
+        </ul>
+      </div>
+
+      <form id="formulario" class="grid gap-10 md:col-span-8" data-whatsapp={numeroWhatsApp} data-correo={sitio.correo} data-revelar style="--i:1">
+        <label class="campo-grupo">
+          <span class="rotulo text-tinta-suave">Tu nombre</span>
+          <input name="nombre" required autocomplete="given-name" placeholder="¿Cómo te llamas?" class="campo" />
+        </label>
+        <fieldset class="campo-grupo">
+          <legend class="rotulo mb-4 text-tinta-suave">Motivo</legend>
+          <div class="flex flex-wrap gap-2">
+            {motivos.map((m, i) => (
+              <label class="motivo">
+                <input type="radio" name="motivo" value={m} checked={i === 0} class="sr-only" />
+                <span>{m}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <label class="campo-grupo">
+          <span class="rotulo text-tinta-suave">Tu mensaje o intención</span>
+          <textarea name="mensaje" required rows="4" placeholder="Por ejemplo: «Me gustaría ir el sábado, pero es mi primera vez y no conozco a nadie»." class="campo resize-y"></textarea>
+        </label>
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <p class="font-texto text-[0.95rem] italic text-tinta-tenue">
+            {numeroWhatsApp
+              ? 'Se abrirá WhatsApp con tu mensaje listo para enviar.'
+              : sitio.correo
+                ? 'Se abrirá tu correo con el mensaje listo para enviar.'
+                : 'Tu mensaje es confidencial.'}
+          </p>
+          <button type="submit" class="boton">Enviar mensaje</button>
+        </div>
+        <p id="aviso-formulario" class="hidden border-l-2 border-rubrica pl-4 font-texto italic text-tinta-suave" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <div class="h-28 md:h-40"></div>
+</Base>
+
+<style>
+  @reference '../styles/global.css';
+  .campo-grupo { @apply flex flex-col gap-3; }
+  .campo {
+    @apply w-full border-0 border-b border-tinta/30 bg-transparent px-0 py-3 font-display text-[1.5rem] text-tinta placeholder:text-tinta/30;
+    transition: border-color 0.4s;
+  }
+  .campo:focus { @apply border-rubrica outline-none; }
+  textarea.campo { @apply text-[1.25rem] leading-snug; }
+  .motivo span {
+    @apply inline-block cursor-pointer border border-tinta/25 px-4 py-2 font-texto text-[1rem] text-tinta-suave;
+    transition: all 0.35s var(--ease-suave);
+  }
+  .motivo:hover span { @apply border-tinta text-tinta; }
+  .motivo input:checked + span { @apply border-tinta bg-tinta text-papel; }
+  .motivo input:focus-visible + span { outline: 2px solid var(--color-rubrica); outline-offset: 2px; }
+  /* Mapa en tonos sepia para que combine con el papel */
+  .mapa { filter: grayscale(1) sepia(0.25) contrast(0.95); transition: filter 0.8s; }
+  .mapa:hover { filter: none; }
+</style>
+
+<script>
+  // No hay servidor: el formulario arma el mensaje y lo abre en WhatsApp (o en el correo).
+  document.addEventListener('astro:page-load', () => {
+    const form = document.getElementById('formulario') as HTMLFormElement | null;
+    const aviso = document.getElementById('aviso-formulario');
+    form?.addEventListener('submit', (evento) => {
+      evento.preventDefault();
+      const datos = new FormData(form);
+      const texto = `Hola, soy ${datos.get('nombre')}.\nMotivo: ${datos.get('motivo')}\n\n${datos.get('mensaje')}`;
+      const { whatsapp, correo } = form.dataset;
+      if (whatsapp) {
+        window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
+      } else if (correo) {
+        window.location.href = `mailto:${correo}?subject=${encodeURIComponent(String(datos.get('motivo')))}&body=${encodeURIComponent(texto)}`;
+      } else if (aviso) {
+        aviso.textContent = 'Muy pronto podrás enviarnos mensajes desde aquí. Mientras tanto, te esperamos en nuestras reuniones.';
+        aviso.classList.remove('hidden');
+      }
+    });
+  });
+</script>

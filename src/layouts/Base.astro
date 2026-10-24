@@ -1,0 +1,108 @@
+---
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/opsz-italic.css';
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '@fontsource-variable/inter-tight/wght.css';
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import sitio from '../data/sitio.json';
+
+interface Props {
+  titulo?: string;
+  descripcion?: string;
+}
+const {
+  titulo,
+  descripcion = 'Caridad Franciscana: fraternidad de la Orden Franciscana Seglar en Torreón, Coahuila. Vivimos el Evangelio al estilo de San Francisco de Asís. Te esperamos.',
+} = Astro.props;
+const tituloCompleto = titulo ? `${titulo} · ${sitio.nombre}` : `${sitio.nombre} · Orden Franciscana Seglar en Torreón`;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonica} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#f5f0e6" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonica} />
+    <!-- Marca que hay JavaScript: solo así se ocultan los elementos que luego aparecen animados -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <ClientRouter fallback="none" />
+  </head>
+  <body>
+    <a href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:bg-tinta focus:px-4 focus:py-2 focus:text-papel">
+      Saltar al contenido
+    </a>
+    <Header />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Todas las animaciones e interacciones del sitio.
+      // Se vuelven a activar en cada página (astro:page-load) porque usamos transiciones entre páginas.
+      function iniciar() {
+        // 1. Revelar elementos al entrar en pantalla
+        const selector = '[data-revelar], [data-regla], [data-trazar], [data-observar]';
+        const observador = new IntersectionObserver(
+          (entradas) => {
+            for (const e of entradas) {
+              if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                observador.unobserve(e.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+        );
+        document.querySelectorAll(selector).forEach((el) => observador.observe(el));
+
+        // 2. Barra de secciones: mostrar mini-logo cuando la mancheta sale de pantalla
+        const mancheta = document.getElementById('mancheta');
+        const barra = document.getElementById('barra');
+        if (mancheta && barra) {
+          new IntersectionObserver(([e]) => barra.classList.toggle('fija', !e.isIntersecting)).observe(mancheta);
+        }
+
+        // 3. Menú de pantalla completa en celular
+        const menu = document.getElementById('menu-completo');
+        const abrir = document.getElementById('abrir-menu');
+        const cerrar = document.getElementById('cerrar-menu');
+        const alternar = (abierto: boolean) => {
+          if (!menu) return;
+          abrir?.setAttribute('aria-expanded', String(abierto));
+          document.body.style.overflow = abierto ? 'hidden' : '';
+          if (abierto) {
+            menu.classList.replace('hidden', 'flex');
+            requestAnimationFrame(() => requestAnimationFrame(() => menu.classList.add('abierto')));
+            cerrar?.focus();
+          } else {
+            menu.classList.remove('abierto');
+            setTimeout(() => menu.classList.replace('flex', 'hidden'), 450);
+            abrir?.focus();
+          }
+        };
+        abrir?.addEventListener('click', () => alternar(true));
+        cerrar?.addEventListener('click', () => alternar(false));
+        menu?.addEventListener('keydown', (e) => e.key === 'Escape' && alternar(false));
+      }
+
+      document.addEventListener('astro:page-load', iniciar);
+      document.addEventListener('astro:before-swap', () => (document.body.style.overflow = ''));
+      // Al cambiar de página, la etiqueta <html> se reemplaza: volvemos a marcar que hay JS.
+      document.addEventListener('astro:after-swap', () => document.documentElement.classList.add('js'));
+    </script>
+  </body>
+</html>

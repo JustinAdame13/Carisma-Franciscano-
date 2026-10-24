@@ -1,0 +1,34 @@
+{
+  "comisiones": [
+    {
+      "nombre": "Formación",
+      "descripcion": "Acompaña a quienes inician el camino y organiza la formación permanente de los hermanos profesos: la Regla, los escritos de San Francisco y Santa Clara, y la vida de la Iglesia.",
+      "responsable": ""
+    },
+    {
+      "nombre": "Caridad y Acción Social",
+      "descripcion": "Coordina los proyectos de servicio: despensas, visitas a enfermos y la colecta de invierno. Es el corazón del nombre de nuestra fraternidad.",
+      "responsable": ""
+    },
+    {
+      "nombre": "Liturgia y Espiritualidad",
+      "descripcion": "Prepara las celebraciones, los retiros y los momentos de oración comunitaria, como el Tránsito de San Francisco y las fiestas franciscanas.",
+      "responsable": ""
+    },
+    {
+      "nombre": "Justicia, Paz e Integridad de la Creación",
+      "descripcion": "Inspirada en el Cántico de las Criaturas y en Laudato Si', promueve el cuidado de la casa común y la defensa de la dignidad de las personas.",
+      "responsable": ""
+    },
+    {
+      "nombre": "Familia",
+      "descripcion": "Acompaña a los matrimonios y familias de la fraternidad, y organiza encuentros donde puedan participar los hijos.",
+      "responsable": ""
+    },
+    {
+      "nombre": "Comunicación",
+      "descripcion": "Mantiene informada a la fraternidad y a la comunidad parroquial: avisos, redes sociales y este sitio web.",
+      "responsable": ""
+    }
+  ]
+}

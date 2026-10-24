@@ -1,0 +1,293 @@
+@import 'tailwindcss';
+
+/*
+  ─────────────────────────────────────────────────────────────
+  Caridad Franciscana · Sistema editorial
+  Idea: el sitio se lee como una revista o un libro de la fraternidad.
+  - Papel cálido, tinta oscura y una sola tinta de color: el rojo
+    "rúbrica" que se usaba en los libros litúrgicos para numerar
+    y titular. Olivo como acento secundario.
+  - Fraunces (titulares), Newsreader (lectura) e Inter Tight (rótulos).
+  - Pocas cajas: la estructura la dan las líneas finas y los números.
+  ─────────────────────────────────────────────────────────────
+*/
+@theme {
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-texto: 'Newsreader Variable', Georgia, serif;
+  --font-ui: 'Inter Tight Variable', system-ui, sans-serif;
+
+  --color-papel: #f5f0e6;
+  --color-papel-claro: #faf7f1;
+  --color-papel-hondo: #ebe3d3;
+  --color-tinta: #1f1b16;
+  --color-tinta-suave: #5c5248;
+  --color-tinta-tenue: #8a7e70;
+  --color-rubrica: #a3402a;
+  --color-sayal: #6b4a33;
+  --color-olivo: #56613f;
+  --color-noche: #1b1814;
+
+  --ease-suave: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+  body {
+    @apply bg-papel font-texto text-tinta antialiased;
+    font-size: 1.125rem;
+    line-height: 1.65;
+    font-optical-sizing: auto;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-tinta;
+    font-weight: 400;
+    text-wrap: balance;
+    font-optical-sizing: auto;
+  }
+  p { text-wrap: pretty; }
+  ::selection { @apply bg-rubrica text-papel; }
+  :focus-visible {
+    outline: 2px solid var(--color-rubrica);
+    outline-offset: 3px;
+  }
+}
+
+/* ── Piezas del sistema ───────────────────────────────────── */
+@layer components {
+  .contenedor {
+    @apply mx-auto w-full max-w-[1320px] px-5 sm:px-8 lg:px-12;
+  }
+
+  /* Escala tipográfica fluida (crece con la pantalla) */
+  .cursiva {
+    font-style: italic;
+    color: var(--color-rubrica);
+  }
+
+  /* Rótulo: mayúsculas pequeñas con tracking, como en una revista */
+  .numeral {
+    font-family: var(--font-display);
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--color-rubrica);
+    font-weight: 300;
+  }
+
+  /* Línea fina (hairline) */
+  .regla { @apply h-px w-full bg-tinta/15; }
+  .regla-fuerte { @apply h-px w-full bg-tinta; }
+
+  /* Enlace con flecha y subrayado que crece */
+  .enlace-flecha {
+    @apply inline-flex items-baseline gap-2 font-ui text-[0.82rem] font-semibold tracking-[0.12em] uppercase text-tinta;
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    padding-bottom: 3px;
+    transition: background-size 0.5s var(--ease-suave), color 0.3s;
+  }
+  .enlace-flecha::after {
+    content: '→';
+    transition: transform 0.4s var(--ease-suave);
+  }
+  .enlace-flecha:hover { background-size: 100% 1px; color: var(--color-rubrica); }
+  .enlace-flecha:hover::after { transform: translateX(4px); }
+
+
+  /* Botón editorial: rectángulo de tinta, sin sombras */
+  .boton {
+    @apply inline-flex items-center justify-center gap-3 border border-tinta bg-tinta px-6 py-3.5 font-ui text-[0.8rem] font-semibold tracking-[0.14em] uppercase text-papel;
+    transition: background-color 0.35s var(--ease-suave), color 0.35s var(--ease-suave);
+  }
+  .boton:hover { @apply bg-transparent text-tinta; }
+  .boton-claro { @apply border-papel bg-papel text-tinta; }
+  .boton-claro:hover { @apply bg-transparent text-papel; }
+
+  /* Letra capitular para el primer párrafo de un texto */
+  .capitular > p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-size: 4.6em;
+    line-height: 0.82;
+    font-weight: 350;
+    color: var(--color-rubrica);
+    padding: 0.06em 0.12em 0 0;
+  }
+
+  /* Columna de lectura */
+  .columnas-2 { columns: 1; column-gap: 3rem; }
+  @media (min-width: 900px) { .columnas-2 { columns: 2; } }
+  .columnas-2 > p { break-inside: avoid-column; }
+  .columnas-2 > p + p { margin-top: 1em; }
+  .lineas .linea { display: block; }
+
+  /* Texto largo escrito desde el panel (noticias y publicaciones) */
+  .prosa {
+    @apply max-w-[66ch] text-[1.2rem] leading-[1.7] text-tinta;
+  }
+  .prosa > * + * { margin-top: 1.25em; }
+  .prosa h2 { @apply titulo mt-14; }
+  .prosa h3 { @apply subtitulo mt-10; }
+  .prosa a { @apply enlace; }
+  .prosa ul { @apply list-disc pl-6 marker:text-rubrica; }
+  .prosa ol { @apply list-decimal pl-6 marker:font-display marker:text-rubrica; }
+  .prosa li + li { margin-top: 0.5em; }
+  .prosa strong { font-weight: 600; }
+  .prosa blockquote {
+    @apply my-12 border-y border-tinta/15 py-8 text-center font-display text-[1.7rem] leading-snug italic text-tinta;
+    font-weight: 350;
+  }
+  .prosa img { @apply w-full; }
+  .prosa > p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-size: 4.4em;
+    line-height: 0.82;
+    font-weight: 350;
+    color: var(--color-rubrica);
+    padding: 0.06em 0.12em 0 0;
+  }
+
+  /* Textura de papel para láminas (fotos pendientes) */
+  .grano {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* ── Utilidades tipográficas (se pueden usar con @apply y con md:, lg:, etc.) */
+@utility display-xl {
+    font-family: var(--font-display);
+    font-size: clamp(3.1rem, 9vw, 8.5rem);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    font-weight: 360;
+}
+
+@utility display-l {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 6vw, 5.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+    font-weight: 370;
+}
+
+@utility titulo {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 3.4vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+}
+
+@utility subtitulo {
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2vw, 1.75rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    font-weight: 420;
+}
+
+@utility lede {
+    font-family: var(--font-texto);
+    font-size: clamp(1.25rem, 1.9vw, 1.6rem);
+    line-height: 1.45;
+    color: var(--color-tinta-suave);
+}
+
+@utility rotulo {
+    font-family: var(--font-ui);
+    font-size: 0.72rem;
+    line-height: 1.3;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+@utility enlace {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    text-decoration-color: color-mix(in srgb, var(--color-rubrica) 60%, transparent);
+    transition: text-decoration-color 0.3s, color 0.3s;
+}
+.enlace:hover { color: var(--color-rubrica); text-decoration-color: var(--color-rubrica); }
+
+/* ── Animaciones ──────────────────────────────────────────────
+   Solo se activan si el navegador tiene JavaScript (clase .js en <html>)
+   y si la persona no pidió reducir el movimiento.
+   ─────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: no-preference) {
+  /* Aparece al entrar en pantalla */
+  .js [data-revelar] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 1s var(--ease-suave),
+      transform 1.1s var(--ease-suave);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+  .js [data-revelar].visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Titulares que suben línea por línea */
+  .js .lineas .linea { overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+  .js .lineas .linea > span {
+    display: block;
+    transform: translateY(110%);
+    transition: transform 1.2s var(--ease-suave);
+    transition-delay: calc(var(--l, 0) * 110ms + 100ms);
+  }
+  .js .lineas.visible .linea > span { transform: none; }
+
+  /* Reglas que se dibujan de izquierda a derecha */
+  .js [data-regla] {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.4s var(--ease-suave);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+  .js [data-regla].visible { transform: scaleX(1); }
+
+  /* La Tau se traza sola */
+  .js [data-trazar] path {
+    stroke-dasharray: var(--largo, 400);
+    stroke-dashoffset: var(--largo, 400);
+    fill-opacity: 0;
+    transition:
+      stroke-dashoffset 2.2s var(--ease-suave),
+      fill-opacity 1s ease 1.4s;
+  }
+  .js [data-trazar].visible path {
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+  }
+
+  /* Parallax suave en láminas (navegadores con animaciones por scroll) */
+  @supports (animation-timeline: view()) {
+    .parallax > * {
+      animation: parallax linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+    @keyframes parallax {
+      from { transform: translateY(-6%) scale(1.12); }
+      to { transform: translateY(6%) scale(1.12); }
+    }
+  }
+
+  /* Transición suave entre páginas */
+  ::view-transition-old(root) { animation: 280ms var(--ease-suave) both desvanecer; }
+  ::view-transition-new(root) { animation: 520ms var(--ease-suave) both aparecer; }
+  @keyframes desvanecer { to { opacity: 0; } }
+  @keyframes aparecer { from { opacity: 0; transform: translateY(12px); } }
+}

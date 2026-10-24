@@ -1,0 +1,28 @@
+---
+// Cierre de página: invitación a conocer la fraternidad.
+import Tau from './Tau.astro';
+import Lineas from './Lineas.astro';
+interface Props {
+  lineas?: string[];
+  texto?: string;
+}
+const {
+  lineas = ['Ven.', '*Te esperamos.*'],
+  texto = 'No necesitas saber nada ni tener todo resuelto. Ven a una reunión: te recibimos como hermano.',
+} = Astro.props;
+---
+<section class="contenedor py-24 md:py-36">
+  <div class="grid items-end gap-10 md:grid-cols-12">
+    <div class="md:col-span-8">
+      <Tau trazar class="mb-8 h-14 w-auto text-rubrica" />
+      <Lineas class="display-xl" lineas={lineas} />
+    </div>
+    <div class="md:col-span-4" data-revelar style="--i:2">
+      <p class="lede">{texto}</p>
+      <div class="mt-8 flex flex-col items-start gap-4">
+        <a href="/contacto" class="boton">Quiero conocerlos</a>
+        <a href="/formacion#primera-visita" class="enlace-flecha">Cómo es la primera visita</a>
+      </div>
+    </div>
+  </div>
+</section>

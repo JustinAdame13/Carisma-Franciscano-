@@ -1,0 +1,205 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Lineas from '../components/Lineas.astro';
+import Rubro from '../components/Rubro.astro';
+import Lamina from '../components/Lamina.astro';
+import Cita from '../components/Cita.astro';
+import FilaCronica from '../components/FilaCronica.astro';
+import Invitacion from '../components/Invitacion.astro';
+import sitio from '../data/sitio.json';
+import { proyectos } from '../data/proyectos.json';
+import { navegacion } from '../data/navegacion';
+
+const noticias = (await getCollection('noticias'))
+  .sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf())
+  .slice(0, 3);
+const proxima = sitio.reuniones[0];
+const sumario = navegacion.filter((n) => n.href !== '/');
+
+const pasos = [
+  { n: 'I', titulo: 'Te recibimos en la puerta', texto: 'Alguien de la fraternidad te saluda y te presenta con los demás. No tienes que registrarte ni explicar nada.' },
+  { n: 'II', titulo: 'Oramos y platicamos', texto: 'Una oración sencilla y un tema de reflexión. Puedes participar o, si prefieres, solo escuchar.' },
+  { n: 'III', titulo: 'Compartimos un café', texto: 'Al terminar convivimos un rato. Es el mejor momento para preguntar lo que quieras, sin compromiso.' },
+];
+---
+<Base>
+  <!-- ═══ PORTADA ═══ -->
+  <section class="contenedor pt-8 md:pt-14">
+    <div class="flex items-baseline justify-between gap-4 border-t border-tinta pt-3" data-revelar>
+      <p class="rotulo text-tinta-suave">Fraternidad de la Orden Franciscana Seglar</p>
+      <p class="rotulo hidden text-tinta-suave sm:block">{sitio.sede}</p>
+    </div>
+
+    <Lineas
+      as="h1"
+      class="display-xl mt-10 md:mt-14"
+      lineas={['Vivir el Evangelio', '*en medio*', 'del mundo.']}
+    />
+
+    <div class="mt-14 grid gap-12 md:mt-20 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-5 lg:col-span-4">
+        <p class="lede" data-revelar style="--i:3">
+          Somos laicos —con familia, trabajo y estudios— que nos reunimos en Torreón para seguir a Jesucristo al estilo de San Francisco de Asís: con sencillez, alegría y las manos puestas en el servicio.
+        </p>
+        <div class="mt-8 flex flex-col items-start gap-4" data-revelar style="--i:4">
+          <a href="/formacion#primera-visita" class="boton">¿Es tu primera vez?</a>
+          <a href="/contacto#horarios" class="enlace-flecha">Horarios y ubicación</a>
+        </div>
+
+        <!-- Nota al margen -->
+        <aside class="mt-14 border-l-2 border-rubrica pl-5" data-revelar style="--i:5">
+          <p class="rotulo text-rubrica">Nota al margen</p>
+          <p class="mt-2 font-texto italic text-tinta-suave">
+            {proxima.titulo}: {proxima.dia.toLowerCase()}, {proxima.hora}, en {sitio.sede}. Las puertas están abiertas.
+          </p>
+        </aside>
+      </div>
+      <div class="md:col-span-7 md:col-start-6 lg:col-span-7 lg:col-start-6">
+        <Lamina numero={1} pie="La fraternidad reunida en la Parroquia de San Felipe de Jesús." proporcion="aspect-[5/4]" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SUMARIO ═══ -->
+  <section class="contenedor pt-28 md:pt-40">
+    <div class="grid gap-10 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-4">
+        <Rubro texto="Sumario" />
+        <h2 class="titulo mt-6" data-revelar>En estas páginas</h2>
+        <p class="mt-4 max-w-[32ch] text-tinta-suave" data-revelar style="--i:1">
+          Todo lo que necesitas saber para conocernos, leído con calma.
+        </p>
+      </div>
+      <ol class="md:col-span-8">
+        {sumario.map((s, i) => (
+          <li data-revelar style={`--i:${i}`}>
+            <a href={s.href} class="group grid grid-cols-[3.5rem_1fr_auto] items-baseline gap-x-4 border-t border-tinta/15 py-5 transition-colors duration-500 hover:border-tinta md:grid-cols-[5rem_1fr_auto] md:py-6">
+              <span class="numeral text-[1.6rem] md:text-[2.2rem]">{s.numero}</span>
+              <span>
+                <span class="block font-display text-[1.6rem] leading-tight tracking-[-0.015em] transition-transform duration-500 ease-[var(--ease-suave)] group-hover:translate-x-2 md:text-[2.1rem]">{s.texto}</span>
+                <span class="mt-1 block text-[1rem] text-tinta-suave italic">{s.resumen}</span>
+              </span>
+              <span class="font-display text-2xl text-rubrica opacity-0 transition-all duration-500 ease-[var(--ease-suave)] -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ═══ EDITORIAL ═══ -->
+  <section class="contenedor pt-28 md:pt-40">
+    <div class="grid gap-10 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-4">
+        <Rubro numero="—" texto="Editorial" />
+      </div>
+      <div class="md:col-span-8">
+        <Lineas class="titulo" lineas={['Nuestro nombre es', 'una *promesa*.']} />
+        <div class="capitular columnas-2 mt-10 text-[1.15rem] text-tinta" data-revelar style="--i:2">
+          <p>
+            Nos llamamos Caridad Franciscana porque queremos que el amor se note en lo concreto. San Francisco encontró a Cristo cuando bajó del caballo para abrazar a un leproso; desde entonces, sus seguidores sabemos que la fe se prueba en el encuentro con el que sufre.
+          </p>
+          <p>
+            Por eso, junto con la oración y la formación, salimos a la colonia: llevamos despensas, visitamos enfermos, compartimos abrigo en invierno. No lo hacemos como una institución, sino como hermanos.
+          </p>
+          <p>
+            Si buscas una comunidad donde crecer en la fe sin juicios ni apariencias, aquí hay un lugar para ti. No importa de dónde vengas ni cuánto tiempo hayas estado lejos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CITA A PÁGINA COMPLETA ═══ -->
+  <section class="mt-28 bg-noche py-24 text-papel md:mt-40 md:py-36">
+    <div class="contenedor grid md:grid-cols-12">
+      <div class="md:col-span-10 md:col-start-2">
+        <Cita tamano="grande" autor="San Francisco de Asís, Cántico de las Criaturas">
+          Alabado seas, mi Señor, con todas tus criaturas, especialmente el señor hermano sol, por quien nos das el día y nos iluminas.
+        </Cita>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PRIMERA VISITA ═══ -->
+  <section class="contenedor pt-28 md:pt-40">
+    <div class="grid gap-10 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-4">
+        <Rubro numero="04" texto="Si vienes por primera vez" />
+      </div>
+      <div class="md:col-span-8">
+        <Lineas class="titulo" lineas={['Lo que pasará', 'cuando *llegues*.']} />
+      </div>
+    </div>
+    <ol class="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
+      {pasos.map((p, i) => (
+        <li class="border-t border-tinta pt-6" data-revelar style={`--i:${i}`}>
+          <span class="numeral block text-[4rem] leading-none md:text-[5.5rem]">{p.n}</span>
+          <h3 class="subtitulo mt-6">{p.titulo}</h3>
+          <p class="mt-3 text-tinta-suave">{p.texto}</p>
+        </li>
+      ))}
+    </ol>
+    <div class="mt-12" data-revelar>
+      <a href="/formacion#primera-visita" class="enlace-flecha">Preguntas frecuentes</a>
+    </div>
+  </section>
+
+  <!-- ═══ OBRAS ═══ -->
+  <section class="contenedor pt-28 md:pt-40">
+    <div class="grid gap-10 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-4">
+        <Rubro numero="03" texto="Obras de caridad" />
+        <Lineas class="titulo mt-6" lineas={['La fe que se', 'vive con las *manos*.']} />
+        <div class="mt-8" data-revelar style="--i:2">
+          <a href="/proyectos" class="enlace-flecha">Todos los proyectos</a>
+        </div>
+      </div>
+      <div class="md:col-span-8">
+        <Lamina numero={2} pie="Entrega de despensas a familias de la colonia." proporcion="aspect-[16/9]" />
+        <ul class="mt-10">
+          {proyectos.slice(0, 3).map((p, i) => (
+            <li class="grid gap-x-8 gap-y-2 border-t border-tinta/15 py-7 md:grid-cols-[1fr_2fr]" data-revelar style={`--i:${i}`}>
+              <div>
+                <h3 class="subtitulo">{p.nombre}</h3>
+                <p class="rotulo mt-2 text-rubrica">{p.frecuencia}</p>
+              </div>
+              <p class="text-tinta-suave">{p.descripcion}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CRÓNICA ═══ -->
+  <section class="contenedor pt-28 md:pt-40">
+    <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+      <div class="md:w-1/2">
+        <Rubro numero="06" texto="Crónica" />
+        <Lineas class="titulo mt-6" lineas={['Lo que vivimos', 'en *fraternidad*.']} />
+      </div>
+      <div data-revelar><a href="/noticias" class="enlace-flecha">Todas las noticias</a></div>
+    </div>
+    {noticias.length > 0 ? (
+      <ul class="mt-12 border-b border-tinta/15">
+        {noticias.map((n, i) => (
+          <FilaCronica
+            href={`/noticias/${n.id}`}
+            titulo={n.data.titulo}
+            fecha={n.data.fecha}
+            resumen={n.data.resumen}
+            etiqueta={n.data.categoria}
+            ejemplo={n.data.ejemplo}
+            i={i}
+          />
+        ))}
+      </ul>
+    ) : (
+      <p class="mt-12 border-t border-tinta/15 pt-8 text-tinta-suave italic">Muy pronto compartiremos aquí lo que vivimos en la fraternidad.</p>
+    )}
+  </section>
+
+  <Invitacion />
+</Base>

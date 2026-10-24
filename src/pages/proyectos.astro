@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import Portadilla from '../components/Portadilla.astro';
+import Rubro from '../components/Rubro.astro';
+import Lineas from '../components/Lineas.astro';
+import Lamina from '../components/Lamina.astro';
+import Cita from '../components/Cita.astro';
+import Invitacion from '../components/Invitacion.astro';
+import { proyectos } from '../data/proyectos.json';
+import { enlaceWhatsApp } from '../lib/utilidades';
+---
+<Base titulo="Proyectos" descripcion="Proyectos de caridad y servicio de Caridad Franciscana en Torreón: despensas, visitas a enfermos, colecta de invierno y más.">
+  <Portadilla
+    href="/proyectos"
+    lineas={['La fe que se vive', 'con las *manos*.']}
+    entrada="San Francisco encontró a Cristo al abrazar a un leproso. Nosotros lo buscamos en las familias de nuestra colonia, en los enfermos y en quien pasa frío."
+  >
+    <div class="mt-10 max-w-[38ch]">
+      <Cita autor="Mateo 25,40">Cada vez que lo hicieron con el más pequeño de mis hermanos, lo hicieron conmigo.</Cita>
+    </div>
+  </Portadilla>
+
+  <div class="contenedor space-y-28 md:space-y-40">
+    {proyectos.map((p, i) => {
+      const ayuda = enlaceWhatsApp(`Hola, me gustaría ayudar en el proyecto "${p.nombre}".`) ?? '/contacto';
+      const par = i % 2 === 1;
+      return (
+        <article class="grid items-start gap-10 md:grid-cols-12 md:gap-8">
+          <div class:list={['md:col-span-6', par ? 'md:order-2 md:col-start-7' : '']}>
+            <Lamina numero={i + 1} pie={p.nombre} proporcion={par ? 'aspect-[4/5]' : 'aspect-[4/3]'} />
+          </div>
+          <div class:list={['md:col-span-5', par ? 'md:order-1 md:col-start-1' : 'md:col-start-8', 'md:pt-10']}>
+            <Rubro numero={String(i + 1).padStart(2, '0')} texto={p.frecuencia} />
+            <Lineas class="titulo mt-6" lineas={[p.nombre]} />
+            <p class="mt-6 text-[1.15rem]" data-revelar style="--i:2">{p.descripcion}</p>
+            <aside class="mt-8 border-l-2 border-rubrica pl-5" data-revelar style="--i:3">
+              <p class="rotulo text-rubrica">Cómo ayudar</p>
+              <p class="mt-2 italic text-tinta-suave">{p.comoAyudar}</p>
+            </aside>
+            <div class="mt-8" data-revelar style="--i:4">
+              <a href={ayuda} class="enlace-flecha" target={ayuda.startsWith('http') ? '_blank' : undefined} rel="noopener">Quiero sumarme</a>
+            </div>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+
+  <!-- DONATIVOS (PENDIENTE: confirmar con la fraternidad si reciben donativos y cómo) -->
+  <section class="mt-28 bg-papel-hondo/60 py-24 md:mt-40 md:py-32">
+    <div class="contenedor grid gap-12 md:grid-cols-12 md:gap-8">
+      <div class="md:col-span-5">
+        <Rubro texto="Donativos" />
+        <Lineas class="titulo mt-6" lineas={['¿Quieres apoyar', 'sin poder *venir*?']} />
+        <p class="mt-6 text-tinta-suave" data-revelar style="--i:2">Escríbenos y te decimos qué se necesita en este momento y dónde entregarlo.</p>
+      </div>
+      <ul class="md:col-span-6 md:col-start-7 md:self-end">
+        {['Alimentos no perecederos', 'Cobijas y ropa abrigadora', 'Tu tiempo y tu oración'].map((d, i) => (
+          <li class="flex items-baseline gap-5 border-t border-tinta/20 py-5 font-display text-[1.6rem]" data-revelar style={`--i:${i}`}>
+            <span class="numeral text-[1rem]">{['i', 'ii', 'iii'][i]}.</span>{d}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <Invitacion lineas={['Hay un lugar', 'para ti en el *servicio*.']} texto="No necesitas experiencia ni pertenecer a la fraternidad para ayudar. Ven, conócenos y sirve con nosotros." />
+</Base>

@@ -1,0 +1,27 @@
+---
+// Fila de una lista de noticias o publicaciones, al estilo de un índice de revista.
+import { formatoFecha } from '../lib/utilidades';
+interface Props {
+  href: string;
+  titulo: string;
+  fecha: Date;
+  resumen: string;
+  etiqueta: string;
+  ejemplo?: boolean;
+  i?: number;
+}
+const { href, titulo, fecha, resumen, etiqueta, ejemplo, i = 0 } = Astro.props;
+---
+<li data-revelar style={`--i:${i}`}>
+  <a href={href} class="group grid gap-x-8 gap-y-2 border-t border-tinta/15 py-8 transition-colors duration-500 hover:bg-papel-hondo/50 md:grid-cols-12 md:py-10">
+    <div class="md:col-span-3">
+      <time datetime={fecha.toISOString()} class="rotulo text-tinta-suave">{formatoFecha(fecha)}</time>
+      <p class="rotulo mt-2 text-rubrica">{etiqueta}{ejemplo && <span class="ml-2 text-tinta-tenue">· ejemplo</span>}</p>
+    </div>
+    <div class="md:col-span-8">
+      <h3 class="subtitulo transition-transform duration-500 ease-[var(--ease-suave)] group-hover:translate-x-2">{titulo}</h3>
+      <p class="mt-2 max-w-[60ch] text-tinta-suave">{resumen}</p>
+    </div>
+    <span class="hidden self-center justify-self-end font-display text-3xl text-rubrica opacity-0 transition-all duration-500 ease-[var(--ease-suave)] group-hover:translate-x-1 group-hover:opacity-100 md:block md:col-span-1" aria-hidden="true">→</span>
+  </a>
+</li>

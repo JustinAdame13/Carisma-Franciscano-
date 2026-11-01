@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Portadilla from '../../components/Portadilla.astro';
+import Cita from '../../components/Cita.astro';
+import Invitacion from '../../components/Invitacion.astro';
+
+// Las oraciones se agregan desde el panel /keystatic (Publicar → Oraciones). Más recientes primero.
+const oraciones = (await getCollection('oraciones')).sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
+---
+<Base titulo="Oraciones" descripcion="Oraciones franciscanas para cada momento del día y de la vida.">
+  <Portadilla
+    href="/oraciones"
+    lineas={['Orar con las palabras', 'de los *santos*.']}
+    entrada="Oraciones de San Francisco, de Santa Clara y de la tradición franciscana, para rezar despacio en cualquier momento del día."
+  />
+
+  <section class="contenedor">
+    {oraciones.length > 0 ? (
+      <div class="grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+        {oraciones.map((o, i) => (
+          <article class="group border-t border-tinta pt-6" data-revelar style={`--i:${i % 3}`}>
+            <a href={`/oraciones/${o.id}`} class="block">
+              <span class="numeral block text-[3.4rem] leading-none transition-transform duration-700 ease-[var(--ease-suave)] group-hover:-translate-y-1">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <p class="rotulo mt-6 text-rubrica">
+                {o.data.categoria}{o.data.ejemplo && <span class="ml-2 text-tinta-tenue">· ejemplo</span>}
+              </p>
+              <h2 class="subtitulo mt-2 transition-colors duration-500 group-hover:text-rubrica">{o.data.titulo}</h2>
+              {o.data.resumen && <p class="mt-3 text-tinta-suave">{o.data.resumen}</p>}
+              {o.data.fuente && <p class="mt-4 font-texto italic text-tinta-suave">— {o.data.fuente}</p>}
+            </a>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p class="lede border-t border-tinta/15 pt-10 italic">Muy pronto compartiré aquí oraciones franciscanas.</p>
+    )}
+
+    <div class="mt-28 max-w-[44rem]">
+      <Cita autor="1 Tesalonicenses 5,17">Oren sin cesar.</Cita>
+    </div>
+  </section>
+
+  <Invitacion lineas={['¿Tienes una', '*intención*?']} texto="Si quieres que acompañe en oración alguna intención tuya o de tu familia, escríbeme." />
+</Base>

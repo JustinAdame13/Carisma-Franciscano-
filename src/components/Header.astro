@@ -14,16 +14,15 @@ const esActiva = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWit
 
 <!-- Cabecera tipo revista (mancheta) -->
 <header id="mancheta" class="contenedor">
-  <div class="hidden grid-cols-3 items-center border-b border-tinta/15 py-2.5 md:grid">
-    <p class="rotulo text-tinta-suave">Torreón, Coahuila</p>
-    <p class="rotulo text-center text-tinta-suave">{sitio.subtitulo}</p>
-    <p class="rotulo text-right text-rubrica">{sitio.lema}</p>
+  <div class="hidden items-center justify-between border-b border-tinta/15 py-2.5 md:flex">
+    <p class="rotulo text-tinta-suave">{sitio.subtitulo}</p>
+    <p class="rotulo text-rubrica">{sitio.lema}</p>
   </div>
   <div class="flex items-center justify-between py-5 md:justify-center md:py-8">
     <a href="/" class="group flex items-center gap-3 md:flex-col md:gap-4" aria-label={`${sitio.nombre}, inicio`}>
       <Tau trazar class="h-9 w-auto text-rubrica md:h-12" />
       <span class="font-display text-[1.6rem] leading-none tracking-[-0.02em] md:text-[clamp(2.4rem,4.5vw,3.6rem)]" style="font-weight:380">
-        Caridad <em class="italic" style="font-weight:330">Franciscana</em>
+        Carisma <em class="italic" style="font-weight:330">Franciscano</em>
       </span>
     </a>
     <button
@@ -43,7 +42,7 @@ const esActiva = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWit
   <div class="contenedor relative flex h-12 items-center justify-center">
     <a href="/" id="mini-logo" class="absolute left-5 flex items-center gap-2 opacity-0 transition-all duration-500 ease-[var(--ease-suave)] -translate-x-2 pointer-events-none sm:left-8 lg:left-12" tabindex="-1" aria-hidden="true">
       <Tau class="h-5 w-auto text-rubrica" />
-      <span class="hidden font-display text-[1.05rem] 2xl:inline">Caridad Franciscana</span>
+      <span class="hidden font-display text-[1.05rem] 2xl:inline">{sitio.nombre}</span>
     </a>
     <ul class="flex items-center gap-1 lg:gap-3">
       {navegacion.map((item) => (
@@ -69,7 +68,7 @@ const esActiva = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWit
   <div class="contenedor flex items-center justify-between py-5">
     <span class="flex items-center gap-3">
       <Tau class="h-8 w-auto text-rubrica" />
-      <span class="font-display text-[1.5rem]">Caridad <em>Franciscana</em></span>
+      <span class="font-display text-[1.5rem]">Carisma <em>Franciscano</em></span>
     </span>
     <button id="cerrar-menu" type="button" class="rotulo py-2 text-papel">Cerrar ✕</button>
   </div>

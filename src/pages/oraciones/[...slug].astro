@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from 'astro:content';
+import Entrada from '../../layouts/Entrada.astro';
+
+// Genera una página por cada archivo .md de la colección.
+// No mostramos fecha: en una oración solo sirve para ordenar la lista.
+export async function getStaticPaths() {
+  const entradas = await getCollection('oraciones');
+  return entradas.map((entrada) => ({ params: { slug: entrada.id }, props: { entrada } }));
+}
+
+const { entrada } = Astro.props;
+const { Content } = await render(entrada);
+---
+<Entrada
+  titulo={entrada.data.titulo}
+  resumen={entrada.data.resumen}
+  etiqueta={entrada.data.categoria}
+  ejemplo={entrada.data.ejemplo}
+  volver={{ texto: 'Volver a Oraciones', href: '/oraciones' }}
+>
+  <Content />
+  {entrada.data.fuente && (
+    <p slot="despues" class="mx-auto mt-10 max-w-[66ch] font-texto text-[1.1rem] italic text-tinta-suave">— {entrada.data.fuente}</p>
+  )}
+</Entrada>

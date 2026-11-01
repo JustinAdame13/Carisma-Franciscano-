@@ -5,7 +5,7 @@ resumen: Durante noviembre recibiremos cobijas, chamarras y ropa abrigadora para
 ejemplo: true
 categoria: Servicio
 ---
-Las noches en La Laguna ya empiezan a enfriar. Como cada año, la fraternidad organiza la **Colecta de Invierno** para llevar abrigo a personas en situación de calle y a familias de la colonia.
+Las noches ya empiezan a enfriar. Como cada año, la fraternidad organiza la **Colecta de Invierno** para llevar abrigo a personas en situación de calle y a familias de la colonia.
 
 ## ¿Qué recibimos?
 

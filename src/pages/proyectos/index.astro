@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Portadilla from '../../components/Portadilla.astro';
+import Rubro from '../../components/Rubro.astro';
+import Lineas from '../../components/Lineas.astro';
+import Lamina from '../../components/Lamina.astro';
+import Cita from '../../components/Cita.astro';
+import Invitacion from '../../components/Invitacion.astro';
+
+// Los proyectos se agregan desde el panel /keystatic (Publicar → Proyectos). Más recientes primero.
+const proyectos = (await getCollection('proyectos')).sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
+---
+<Base titulo="Proyectos" descripcion="Proyectos de caridad y servicio inspirados en San Francisco de Asís.">
+  <Portadilla
+    href="/proyectos"
+    lineas={['La fe que se vive', 'con las *manos*.']}
+    entrada="San Francisco encontró a Cristo al abrazar a un leproso. Estos son los proyectos donde busco hacer lo mismo: en las familias, en los enfermos y en quien pasa frío."
+  >
+    <div class="mt-10 max-w-[38ch]">
+      <Cita autor="Mateo 25,40">Cada vez que lo hicieron con el más pequeño de mis hermanos, lo hicieron conmigo.</Cita>
+    </div>
+  </Portadilla>
+
+  <div class="contenedor space-y-28 pb-10 md:space-y-40">
+    {proyectos.length === 0 && (
+      <p class="lede border-t border-tinta/15 pt-10 italic">Muy pronto compartiré aquí los proyectos.</p>
+    )}
+    {proyectos.map((p, i) => {
+      const par = i % 2 === 1;
+      const enlace = `/proyectos/${p.id}`;
+      return (
+        <article class="grid items-start gap-10 md:grid-cols-12 md:gap-8">
+          <a href={enlace} class:list={['md:col-span-6', par ? 'md:order-2 md:col-start-7' : '']}>
+            <Lamina numero={i + 1} pie={p.data.titulo} src={p.data.imagen ?? undefined} proporcion={par ? 'aspect-[4/5]' : 'aspect-[4/3]'} />
+          </a>
+          <div class:list={['md:col-span-5', par ? 'md:order-1 md:col-start-1' : 'md:col-start-8', 'md:pt-10']}>
+            <Rubro numero={String(i + 1).padStart(2, '0')} texto={p.data.frecuencia || 'Proyecto'} />
+            <Lineas class="titulo mt-6" lineas={[p.data.titulo]} />
+            <p class="mt-6 text-[1.15rem]" data-revelar style="--i:2">
+              {p.data.resumen}
+              {p.data.ejemplo && <span class="rotulo ml-2 text-tinta-tenue">· ejemplo</span>}
+            </p>
+            {p.data.comoAyudar && (
+              <aside class="mt-8 border-l-2 border-rubrica pl-5" data-revelar style="--i:3">
+                <p class="rotulo text-rubrica">Cómo ayudar</p>
+                <p class="mt-2 italic text-tinta-suave">{p.data.comoAyudar}</p>
+              </aside>
+            )}
+            <div class="mt-8" data-revelar style="--i:4">
+              <a href={enlace} class="enlace-flecha">Leer más</a>
+            </div>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+
+  <Invitacion lineas={['¿Quieres', 'echar la *mano*?']} texto="No necesitas experiencia para ayudar. Escríbeme y te cuento qué se necesita en este momento." />
+</Base>

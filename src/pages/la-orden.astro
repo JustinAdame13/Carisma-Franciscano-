@@ -3,7 +3,6 @@ import Base from '../layouts/Base.astro';
 import Portadilla from '../components/Portadilla.astro';
 import Rubro from '../components/Rubro.astro';
 import Lineas from '../components/Lineas.astro';
-import Lamina from '../components/Lamina.astro';
 import Cita from '../components/Cita.astro';
 import Invitacion from '../components/Invitacion.astro';
 
@@ -11,7 +10,7 @@ const cronologia = [
   { fecha: '1209', titulo: 'Nace el movimiento franciscano', texto: 'Francisco de Asís y sus primeros compañeros deciden vivir el Evangelio al pie de la letra: en pobreza, alegría y servicio a los más pequeños.' },
   { fecha: '1221', titulo: 'Los laicos también quieren seguirlo', texto: 'Hombres y mujeres casados, con trabajo y familia, piden vivir el mismo espíritu sin dejar su vida en el mundo. Así nace la Orden de los Hermanos y Hermanas de la Penitencia, hoy Orden Franciscana Seglar.' },
   { fecha: '1978', titulo: 'Una Regla para hoy', texto: 'San Pablo VI aprueba la Regla actual de la Orden Franciscana Seglar, que invita a «pasar del Evangelio a la vida y de la vida al Evangelio».' },
-  { fecha: 'Hoy', titulo: 'Presentes en todo el mundo', texto: 'La OFS está presente en más de cien países. En México se organiza por regiones; nuestra fraternidad pertenece a la Región de La Laguna.' },
+  { fecha: 'Hoy', titulo: 'Presentes en todo el mundo', texto: 'La familia franciscana —frailes, clarisas y seglares— está presente en más de cien países y sigue inspirando a personas de toda condición.' },
 ];
 
 const pilares = [
@@ -21,17 +20,8 @@ const pilares = [
   { n: 'IV', titulo: 'Paz y cuidado de la creación', texto: 'Como Francisco, llamamos «hermana» a la creación. Trabajamos por la paz, la justicia y el cuidado de nuestra casa común.' },
 ];
 
-// PENDIENTE: nombres reales del consejo. Cuando la fraternidad los comparta, escríbelos en "nombre".
-const consejo = [
-  { cargo: 'Ministro/a', nombre: '' },
-  { cargo: 'Viceministro/a', nombre: '' },
-  { cargo: 'Secretario/a', nombre: '' },
-  { cargo: 'Tesorero/a', nombre: '' },
-  { cargo: 'Formador/a', nombre: '' },
-  { cargo: 'Asistente espiritual', nombre: '' },
-];
 ---
-<Base titulo="La Orden" descripcion="Qué es la Orden Franciscana Seglar, su historia y la fraternidad Caridad Franciscana en Torreón.">
+<Base titulo="La Orden" descripcion="Qué es la familia franciscana, su historia y los rasgos de su espiritualidad.">
   <Portadilla
     href="/la-orden"
     lineas={['Vivir el Evangelio', 'sin dejar *el mundo*.']}
@@ -67,7 +57,7 @@ const consejo = [
     <div class="grid gap-10 md:grid-cols-12 md:gap-8">
       <div class="md:col-span-4">
         <Rubro numero="II" texto="Cronología" />
-        <Lineas class="titulo mt-6" lineas={['De Asís', 'a *La Laguna*.']} />
+        <Lineas class="titulo mt-6" lineas={['De Asís', 'a *nuestros días*.']} />
       </div>
       <ol class="md:col-span-8">
         {cronologia.map((c, i) => (
@@ -105,45 +95,6 @@ const consejo = [
           </article>
         ))}
       </div>
-    </div>
-  </section>
-
-  <!-- Nuestra fraternidad -->
-  <section class="contenedor pt-28 md:pt-40">
-    <div class="grid gap-12 md:grid-cols-12 md:gap-8">
-      <div class="md:col-span-5">
-        <Lamina numero={3} pie="La fraternidad Caridad Franciscana." />
-      </div>
-      <div class="md:col-span-6 md:col-start-7">
-        <Rubro numero="IV" texto="Nuestra fraternidad" />
-        <Lineas class="titulo mt-6" lineas={['Caridad', '*Franciscana*.']} />
-        <!-- PENDIENTE: historia real de la fraternidad (año de fundación y cómo empezó). -->
-        <div class="mt-8 space-y-5 text-[1.15rem]" data-revelar style="--i:2">
-          <p>Somos una fraternidad de la Orden Franciscana Seglar con sede en la Parroquia de San Felipe de Jesús, en la colonia Ampliación Los Ángeles de Torreón.</p>
-          <p>Nuestro nombre resume lo que queremos ser: hermanos que encuentran a Cristo en el pobre, en el enfermo y en quien está solo. Por eso, junto con la oración y la formación, la caridad concreta ocupa un lugar central.</p>
-          <p class="text-tinta-suave">Pertenecemos a la Región de La Laguna y caminamos en comunión con la parroquia y con toda la familia franciscana.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Consejo -->
-  <section class="contenedor pt-28 md:pt-40">
-    <div class="grid gap-10 md:grid-cols-12 md:gap-8">
-      <div class="md:col-span-4">
-        <Rubro numero="V" texto="Consejo" />
-        <p class="mt-6 max-w-[34ch] text-tinta-suave" data-revelar>
-          En la OFS el consejo no manda: sirve. Sus miembros son elegidos por la fraternidad para animar y acompañar la vida en común.
-        </p>
-      </div>
-      <dl class="md:col-span-8">
-        {consejo.map((c, i) => (
-          <div class="flex flex-col gap-1 border-t border-tinta/15 py-5 sm:flex-row sm:items-baseline sm:justify-between" data-revelar style={`--i:${i}`}>
-            <dt class="rotulo text-tinta-suave">{c.cargo}</dt>
-            <dd class:list={['font-display text-[1.5rem]', !c.nombre && 'italic text-tinta-tenue']}>{c.nombre || 'Por confirmar'}</dd>
-          </div>
-        ))}
-      </dl>
     </div>
   </section>
 

@@ -16,9 +16,9 @@ interface Props {
 }
 const {
   titulo,
-  descripcion = 'Caridad Franciscana: fraternidad de la Orden Franciscana Seglar en Torreón, Coahuila. Vivimos el Evangelio al estilo de San Francisco de Asís. Te esperamos.',
+  descripcion = 'Carisma Franciscano: oraciones, formación y reflexiones para vivir el Evangelio al estilo de San Francisco de Asís.',
 } = Astro.props;
-const tituloCompleto = titulo ? `${titulo} · ${sitio.nombre}` : `${sitio.nombre} · Orden Franciscana Seglar en Torreón`;
+const tituloCompleto = titulo ? `${titulo} · ${sitio.nombre}` : `${sitio.nombre} · ${sitio.subtitulo}`;
 const canonica = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>

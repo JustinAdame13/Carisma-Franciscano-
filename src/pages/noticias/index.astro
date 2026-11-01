@@ -9,8 +9,8 @@ import { formatoFecha } from '../../lib/utilidades';
 const entradas = (await getCollection('noticias')).sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
 const [destacada, ...resto] = entradas;
 ---
-<Base titulo="Noticias" descripcion="Avisos, eventos y momentos que compartimos como fraternidad y con la comunidad parroquial.">
-  <Portadilla href="/noticias" lineas={['Lo que vivimos', 'en *fraternidad*.']} entrada="Avisos, eventos y momentos que compartimos como fraternidad y con la comunidad parroquial." />
+<Base titulo="Noticias" descripcion="Avisos, eventos y crónica de la vida franciscana.">
+  <Portadilla href="/noticias" lineas={['Avisos', 'y *crónica*.']} entrada="Avisos, eventos y momentos de la vida franciscana que vale la pena contar." />
 
   <section class="contenedor pb-28 md:pb-40">
     {destacada ? (
@@ -50,7 +50,7 @@ const [destacada, ...resto] = entradas;
         )}
       </>
     ) : (
-      <p class="lede border-t border-tinta/15 pt-10 italic">Muy pronto compartiremos aquí avisos y noticias de la fraternidad.</p>
+      <p class="lede border-t border-tinta/15 pt-10 italic">Muy pronto compartiré aquí avisos y noticias.</p>
     )}
   </section>
 </Base>

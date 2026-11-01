@@ -5,6 +5,9 @@ import { config, collection, singleton, fields } from '@keystatic/core';
   - En tu computadora (npm run dev) guarda los cambios directo en los archivos.
   - En Vercel guarda los cambios como commits en GitHub y el sitio se vuelve a publicar solo.
   Si el repositorio tiene otro nombre, cámbialo en `repo`.
+
+  Cada colección de aquí debe tener su gemela en src/content.config.ts:
+  Keystatic arma el formulario del panel y Astro valida los archivos al compilar.
 */
 
 const camposDePublicacion = (carpeta: string) => ({
@@ -23,13 +26,13 @@ const camposDePublicacion = (carpeta: string) => ({
 
 export default config({
   storage: import.meta.env.PROD
-    ? { kind: 'github', repo: 'JustinAdame13/caridad-franciscana' }
+    ? { kind: 'github', repo: 'JustinAdame13/Carisma-Franciscano-' }
     : { kind: 'local' },
   ui: {
-    brand: { name: 'Caridad Franciscana' },
+    brand: { name: 'Carisma Franciscano' },
     navigation: {
-      Publicar: ['noticias', 'publicaciones'],
-      'Datos del sitio': ['sitio', 'comisiones', 'proyectos'],
+      Publicar: ['publicaciones', 'noticias', 'proyectos', 'formacion', 'oraciones'],
+      'Datos del sitio': ['sitio'],
     },
   },
   collections: {
@@ -79,10 +82,76 @@ export default config({
         }),
       },
     }),
+    proyectos: collection({
+      label: 'Proyectos',
+      slugField: 'titulo',
+      path: 'src/content/proyectos/*',
+      format: { contentField: 'contenido' },
+      entryLayout: 'content',
+      columns: ['titulo', 'fecha'],
+      schema: {
+        ...camposDePublicacion('proyectos'),
+        frecuencia: fields.text({ label: 'Frecuencia (opcional)', description: 'Ej: Cada mes, Sábados por la mañana.' }),
+        comoAyudar: fields.text({ label: '¿Cómo puede ayudar alguien? (opcional)', multiline: true }),
+      },
+    }),
+    formacion: collection({
+      label: 'Formación',
+      slugField: 'titulo',
+      path: 'src/content/formacion/*',
+      format: { contentField: 'contenido' },
+      entryLayout: 'content',
+      columns: ['titulo', 'fecha'],
+      schema: {
+        ...camposDePublicacion('formacion'),
+        tema: fields.select({
+          label: 'Tema',
+          options: [
+            { label: 'Espiritualidad', value: 'Espiritualidad' },
+            { label: 'San Francisco y Santa Clara', value: 'San Francisco y Santa Clara' },
+            { label: 'Sagrada Escritura', value: 'Sagrada Escritura' },
+            { label: 'Doctrina', value: 'Doctrina' },
+            { label: 'Lectura recomendada', value: 'Lectura recomendada' },
+          ],
+          defaultValue: 'Espiritualidad',
+        }),
+        archivo: fields.file({
+          label: 'Archivo PDF (opcional)',
+          directory: 'public/documentos',
+          publicPath: '/documentos/',
+        }),
+      },
+    }),
+    oraciones: collection({
+      label: 'Oraciones',
+      slugField: 'titulo',
+      path: 'src/content/oraciones/*',
+      format: { contentField: 'contenido' },
+      entryLayout: 'content',
+      columns: ['titulo', 'categoria'],
+      schema: {
+        titulo: fields.slug({ name: { label: 'Título' } }),
+        fecha: fields.date({ label: 'Fecha', description: 'Solo sirve para ordenar: las más recientes salen primero.', defaultValue: { kind: 'today' }, validation: { isRequired: true } }),
+        fuente: fields.text({ label: 'Autor o fuente (opcional)', description: 'Ej: San Francisco de Asís, Tradición franciscana.' }),
+        categoria: fields.select({
+          label: 'Categoría',
+          options: [
+            { label: 'Oración', value: 'Oración' },
+            { label: 'Novena', value: 'Novena' },
+            { label: 'Letanía', value: 'Letanía' },
+            { label: 'Bendición', value: 'Bendición' },
+          ],
+          defaultValue: 'Oración',
+        }),
+        resumen: fields.text({ label: 'Nota breve (opcional)', description: 'Para qué momento es o una intención. Aparece en la lista.', multiline: true }),
+        ejemplo: fields.checkbox({ label: 'Es contenido de ejemplo', description: 'Márcalo solo en oraciones de prueba.', defaultValue: false }),
+        contenido: fields.markdoc({ label: 'Texto de la oración', extension: 'md' }),
+      },
+    }),
   },
   singletons: {
     sitio: singleton({
-      label: 'Datos de la fraternidad',
+      label: 'Datos del sitio',
       path: 'src/data/sitio',
       format: 'json',
       schema: {
@@ -94,8 +163,8 @@ export default config({
         nombre: fields.text({ label: 'Nombre' }),
         subtitulo: fields.text({ label: 'Subtítulo' }),
         lema: fields.text({ label: 'Lema' }),
-        sede: fields.text({ label: 'Sede (parroquia)' }),
-        direccion: fields.text({ label: 'Dirección' }),
+        sede: fields.text({ label: 'Lugar (opcional)', description: 'Si lo llenas, aparece en el pie de página.' }),
+        direccion: fields.text({ label: 'Dirección (opcional)' }),
         whatsapp: fields.text({ label: 'WhatsApp', description: 'Solo números, con lada de país. Ej: 528711234567' }),
         correo: fields.text({ label: 'Correo electrónico' }),
         facebook: fields.url({ label: 'Facebook (enlace)' }),
@@ -108,38 +177,7 @@ export default config({
             lugar: fields.text({ label: 'Lugar' }),
             descripcion: fields.text({ label: 'Descripción', multiline: true }),
           }),
-          { label: 'Horarios de reuniones', itemLabel: (p) => `${p.fields.titulo.value} · ${p.fields.dia.value}` },
-        ),
-      },
-    }),
-    comisiones: singleton({
-      label: 'Comisiones',
-      path: 'src/data/comisiones',
-      format: 'json',
-      schema: {
-        comisiones: fields.array(
-          fields.object({
-            nombre: fields.text({ label: 'Nombre' }),
-            descripcion: fields.text({ label: 'Descripción', multiline: true }),
-            responsable: fields.text({ label: 'Responsable (opcional)' }),
-          }),
-          { label: 'Comisiones', itemLabel: (p) => p.fields.nombre.value },
-        ),
-      },
-    }),
-    proyectos: singleton({
-      label: 'Proyectos',
-      path: 'src/data/proyectos',
-      format: 'json',
-      schema: {
-        proyectos: fields.array(
-          fields.object({
-            nombre: fields.text({ label: 'Nombre' }),
-            frecuencia: fields.text({ label: 'Frecuencia' }),
-            descripcion: fields.text({ label: 'Descripción', multiline: true }),
-            comoAyudar: fields.text({ label: '¿Cómo puede ayudar alguien?', multiline: true }),
-          }),
-          { label: 'Proyectos', itemLabel: (p) => p.fields.nombre.value },
+          { label: 'Horarios (opcional)', itemLabel: (p) => `${p.fields.titulo.value} · ${p.fields.dia.value}` },
         ),
       },
     }),

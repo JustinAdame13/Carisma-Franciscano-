@@ -11,7 +11,7 @@ export function formatoFecha(fecha: Date) {
 }
 
 /** Enlace de WhatsApp con mensaje prellenado (o null si aún no hay número). */
-export function enlaceWhatsApp(mensaje = 'Hola, me gustaría conocer la fraternidad Caridad Franciscana.') {
+export function enlaceWhatsApp(mensaje = 'Hola, te escribo desde Carisma Franciscano.') {
   const numero = sitio.whatsapp.replace(/\D/g, '');
   if (!numero) return null;
   return `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;

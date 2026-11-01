@@ -1,10 +1,10 @@
 {
   "modoBorrador": true,
-  "nombre": "Caridad Franciscana",
-  "subtitulo": "Orden Franciscana Seglar · Región de La Laguna",
+  "nombre": "Carisma Franciscano",
+  "subtitulo": "Oraciones, formación y reflexiones franciscanas",
   "lema": "Paz y Bien",
-  "sede": "Parroquia de San Felipe de Jesús",
-  "direccion": "Serapio Santiago 126, Amp. Los Ángeles, 27148 Torreón, Coah.",
+  "sede": "",
+  "direccion": "",
   "whatsapp": "",
   "correo": "",
   "facebook": "",
@@ -28,7 +28,7 @@
       "titulo": "Eucaristía en fraternidad",
       "dia": "Último domingo de cada mes",
       "hora": "12:00 h",
-      "lugar": "Templo de San Felipe de Jesús",
+      "lugar": "Templo parroquial",
       "descripcion": "Celebramos juntos la misa y después compartimos un café."
     }
   ]

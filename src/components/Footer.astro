@@ -6,8 +6,11 @@ import { enlaceWhatsApp, enlaceMapa } from '../lib/utilidades';
 
 const whatsapp = enlaceWhatsApp();
 const anio = new Date().getFullYear();
+// El contacto vive solo aquí. Otras páginas enlazan a "#contacto".
+const hayLugar = Boolean(sitio.sede || sitio.direccion);
+const hayContacto = Boolean(whatsapp || sitio.correo || sitio.facebook || sitio.instagram);
 ---
-<footer class="bg-noche text-papel">
+<footer id="contacto" class="bg-noche text-papel">
   <div class="contenedor pt-20 pb-10 md:pt-28">
     <div class="flex flex-col items-start justify-between gap-10 md:flex-row md:items-end">
       <p class="font-display text-[clamp(3.5rem,11vw,9.5rem)] leading-[0.85] tracking-[-0.04em]" style="font-weight:330" data-revelar>
@@ -21,13 +24,17 @@ const anio = new Date().getFullYear();
     <span class="mt-16 block h-px w-full bg-papel/20" data-regla></span>
 
     <div class="grid gap-12 pt-12 sm:grid-cols-2 lg:grid-cols-4">
-      <div data-revelar>
-        <p class="rotulo text-rubrica">Dónde</p>
-        <a href={enlaceMapa} target="_blank" rel="noopener" class="mt-4 block text-papel/85 transition-colors hover:text-papel">
-          <span class="font-display text-[1.3rem] text-papel">{sitio.sede}</span><br />
-          <span class="text-[1rem]">{sitio.direccion}</span>
-        </a>
-      </div>
+      {hayLugar && (
+        <div data-revelar>
+          <p class="rotulo text-rubrica">Dónde</p>
+          <a href={enlaceMapa} target="_blank" rel="noopener" class="mt-4 block text-papel/85 transition-colors hover:text-papel">
+            {sitio.sede && <span class="font-display text-[1.3rem] text-papel">{sitio.sede}</span>}
+            {sitio.sede && sitio.direccion && <br />}
+            {sitio.direccion && <span class="text-[1rem]">{sitio.direccion}</span>}
+          </a>
+        </div>
+      )}
+      {sitio.reuniones.length > 0 && (
       <div data-revelar style="--i:1">
         <p class="rotulo text-rubrica">Cuándo</p>
         <ul class="mt-4 space-y-3">
@@ -39,6 +46,7 @@ const anio = new Date().getFullYear();
           ))}
         </ul>
       </div>
+      )}
       <div data-revelar style="--i:2">
         <p class="rotulo text-rubrica">Sumario</p>
         <ul class="mt-4 grid grid-cols-2 gap-x-6 gap-y-1.5">
@@ -53,12 +61,12 @@ const anio = new Date().getFullYear();
         </ul>
       </div>
       <div data-revelar style="--i:3">
-        <p class="rotulo text-rubrica">Escríbenos</p>
-        <p class="mt-4 text-[1rem] text-papel/75">¿Dudas o quieres conocernos? Con gusto te respondemos.</p>
+        <p class="rotulo text-rubrica">Contacto</p>
+        <p class="mt-4 text-[1rem] text-papel/75">
+          {hayContacto ? '¿Dudas, intenciones de oración o quieres platicar? Escríbeme.' : 'Muy pronto habrá aquí una forma de escribirme.'}
+        </p>
         <div class="mt-5 flex flex-col items-start gap-3">
-          {whatsapp
-            ? <a href={whatsapp} target="_blank" rel="noopener" class="boton boton-claro">WhatsApp</a>
-            : <a href="/contacto" class="boton boton-claro">Contacto</a>}
+          {whatsapp && <a href={whatsapp} target="_blank" rel="noopener" class="boton boton-claro">WhatsApp</a>}
           {sitio.correo && <a href={`mailto:${sitio.correo}`} class="enlace text-papel/85">{sitio.correo}</a>}
           <div class="flex gap-4 text-[0.95rem]">
             {sitio.facebook && <a href={sitio.facebook} target="_blank" rel="noopener" class="enlace">Facebook</a>}

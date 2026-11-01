@@ -8,7 +8,7 @@ import vercel from '@astrojs/vercel';
 // Las páginas del sitio se generan como HTML estático.
 // Solo el panel /keystatic (CMS) corre en el servidor de Vercel.
 export default defineConfig({
-  site: 'https://caridad-franciscana.vercel.app', // Cambiar cuando tengan dominio propio
+  site: 'https://carisma-franciscano.vercel.app', // Cambiar cuando tengan dominio propio
   output: 'static',
   devToolbar: { enabled: false },
   adapter: vercel(),

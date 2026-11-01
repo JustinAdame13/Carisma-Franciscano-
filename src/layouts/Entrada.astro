@@ -1,5 +1,5 @@
 ---
-// Plantilla para leer una noticia o publicación completa, como un artículo de revista.
+// Plantilla para leer una entrada completa (noticia, publicación, proyecto, formación u oración), como un artículo de revista.
 import Base from './Base.astro';
 import Lineas from '../components/Lineas.astro';
 import Tau from '../components/Tau.astro';
@@ -8,8 +8,8 @@ import { formatoFecha } from '../lib/utilidades';
 
 interface Props {
   titulo: string;
-  resumen: string;
-  fecha: Date;
+  resumen?: string | null;
+  fecha?: Date;
   etiqueta: string;
   imagen?: string | null;
   ejemplo?: boolean;
@@ -18,17 +18,18 @@ interface Props {
 }
 const { titulo, resumen, fecha, etiqueta, imagen, ejemplo, archivo, volver } = Astro.props;
 ---
-<Base titulo={titulo} descripcion={resumen}>
+<Base titulo={titulo} descripcion={resumen || undefined}>
   <article>
     <header class="contenedor pt-10 pb-14 md:pt-16">
       <a href={volver.href} class="rotulo text-tinta-suave transition-colors hover:text-rubrica" data-revelar>← {volver.texto}</a>
       <div class="mx-auto mt-14 max-w-[960px] text-center">
         <p class="rotulo text-rubrica" data-revelar>
-          {etiqueta} <span class="mx-2 text-tinta-tenue">·</span> <time datetime={fecha.toISOString()} class="text-tinta-suave">{formatoFecha(fecha)}</time>
+          {etiqueta}
+          {fecha && <><span class="mx-2 text-tinta-tenue">·</span> <time datetime={fecha.toISOString()} class="text-tinta-suave">{formatoFecha(fecha)}</time></>}
           {ejemplo && <span class="ml-2 text-tinta-tenue">· contenido de ejemplo</span>}
         </p>
         <Lineas as="h1" class="display-l mt-8" lineas={[titulo]} />
-        <p class="lede mx-auto mt-8 max-w-[48ch]" data-revelar style="--i:2">{resumen}</p>
+        {resumen && <p class="lede mx-auto mt-8 max-w-[48ch]" data-revelar style="--i:2">{resumen}</p>}
         <Tau trazar class="mx-auto mt-12 h-8 w-auto text-rubrica" />
       </div>
     </header>
@@ -43,6 +44,7 @@ const { titulo, resumen, fecha, etiqueta, imagen, ejemplo, archivo, volver } = A
       <div class="prosa mx-auto" data-revelar>
         <slot />
       </div>
+      <slot name="despues" />
       {archivo && (
         <div class="mx-auto mt-12 max-w-[66ch]">
           <a href={archivo} class="boton" download>Descargar documento (PDF)</a>

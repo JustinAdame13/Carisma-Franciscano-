@@ -1,5 +1,5 @@
 ---
-// Cierre de página: invitación a conocer la fraternidad.
+// Cierre de página: invitación a escribir o seguir leyendo.
 import Tau from './Tau.astro';
 import Lineas from './Lineas.astro';
 interface Props {
@@ -7,8 +7,8 @@ interface Props {
   texto?: string;
 }
 const {
-  lineas = ['Ven.', '*Te esperamos.*'],
-  texto = 'No necesitas saber nada ni tener todo resuelto. Ven a una reunión: te recibimos como hermano.',
+  lineas = ['Paz', '*y Bien.*'],
+  texto = 'Gracias por leer. Si algo de lo que encontraste aquí te ayudó, o quieres compartir una intención de oración, escríbeme.',
 } = Astro.props;
 ---
 <section class="contenedor py-24 md:py-36">
@@ -20,8 +20,8 @@ const {
     <div class="md:col-span-4" data-revelar style="--i:2">
       <p class="lede">{texto}</p>
       <div class="mt-8 flex flex-col items-start gap-4">
-        <a href="/contacto" class="boton">Quiero conocerlos</a>
-        <a href="/formacion#primera-visita" class="enlace-flecha">Cómo es la primera visita</a>
+        <a href="#contacto" class="boton">Escribir</a>
+        <a href="/oraciones" class="enlace-flecha">Ver oraciones</a>
       </div>
     </div>
   </div>

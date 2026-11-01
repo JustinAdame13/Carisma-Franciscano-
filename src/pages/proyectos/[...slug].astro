@@ -1,0 +1,35 @@
+---
+import { getCollection, render } from 'astro:content';
+import Entrada from '../../layouts/Entrada.astro';
+import { enlaceWhatsApp } from '../../lib/utilidades';
+
+// Genera una página por cada archivo .md de la colección.
+export async function getStaticPaths() {
+  const entradas = await getCollection('proyectos');
+  return entradas.map((entrada) => ({ params: { slug: entrada.id }, props: { entrada } }));
+}
+
+const { entrada } = Astro.props;
+const { Content } = await render(entrada);
+const ayuda = enlaceWhatsApp(`Hola, me gustaría ayudar en el proyecto "${entrada.data.titulo}".`) ?? '#contacto';
+---
+<Entrada
+  titulo={entrada.data.titulo}
+  resumen={entrada.data.resumen}
+  fecha={entrada.data.fecha}
+  etiqueta={entrada.data.frecuencia || 'Proyecto'}
+  imagen={entrada.data.imagen}
+  ejemplo={entrada.data.ejemplo}
+  volver={{ texto: 'Volver a Proyectos', href: '/proyectos' }}
+>
+  <Content />
+  <div slot="despues" class="mx-auto mt-12 max-w-[66ch]">
+    {entrada.data.comoAyudar && (
+      <aside class="border-l-2 border-rubrica pl-5">
+        <p class="rotulo text-rubrica">Cómo ayudar</p>
+        <p class="mt-2 italic text-tinta-suave">{entrada.data.comoAyudar}</p>
+      </aside>
+    )}
+    <a href={ayuda} class="boton mt-8" target={ayuda.startsWith('http') ? '_blank' : undefined} rel="noopener">Quiero sumarme</a>
+  </div>
+</Entrada>

@@ -8,27 +8,23 @@ import Cita from '../components/Cita.astro';
 import FilaCronica from '../components/FilaCronica.astro';
 import Invitacion from '../components/Invitacion.astro';
 import sitio from '../data/sitio.json';
-import { proyectos } from '../data/proyectos.json';
 import { navegacion } from '../data/navegacion';
 
 const noticias = (await getCollection('noticias'))
   .sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf())
   .slice(0, 3);
+const proyectos = (await getCollection('proyectos'))
+  .sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf())
+  .slice(0, 3);
 const proxima = sitio.reuniones[0];
 const sumario = navegacion.filter((n) => n.href !== '/');
 
-const pasos = [
-  { n: 'I', titulo: 'Te recibimos en la puerta', texto: 'Alguien de la fraternidad te saluda y te presenta con los demás. No tienes que registrarte ni explicar nada.' },
-  { n: 'II', titulo: 'Oramos y platicamos', texto: 'Una oración sencilla y un tema de reflexión. Puedes participar o, si prefieres, solo escuchar.' },
-  { n: 'III', titulo: 'Compartimos un café', texto: 'Al terminar convivimos un rato. Es el mejor momento para preguntar lo que quieras, sin compromiso.' },
-];
 ---
 <Base>
   <!-- ═══ PORTADA ═══ -->
   <section class="contenedor pt-8 md:pt-14">
     <div class="flex items-baseline justify-between gap-4 border-t border-tinta pt-3" data-revelar>
-      <p class="rotulo text-tinta-suave">Fraternidad de la Orden Franciscana Seglar</p>
-      <p class="rotulo hidden text-tinta-suave sm:block">{sitio.sede}</p>
+      <p class="rotulo text-tinta-suave">Bitácora franciscana</p>
     </div>
 
     <Lineas
@@ -40,23 +36,25 @@ const pasos = [
     <div class="mt-14 grid gap-12 md:mt-20 md:grid-cols-12 md:gap-8">
       <div class="md:col-span-5 lg:col-span-4">
         <p class="lede" data-revelar style="--i:3">
-          Somos laicos —con familia, trabajo y estudios— que nos reunimos en Torreón para seguir a Jesucristo al estilo de San Francisco de Asís: con sencillez, alegría y las manos puestas en el servicio.
+          Un espacio para compartir oraciones, formación y reflexiones sobre cómo seguir a Jesucristo al estilo de San Francisco de Asís: con sencillez, alegría y las manos puestas en el servicio.
         </p>
         <div class="mt-8 flex flex-col items-start gap-4" data-revelar style="--i:4">
-          <a href="/formacion#primera-visita" class="boton">¿Es tu primera vez?</a>
-          <a href="/contacto#horarios" class="enlace-flecha">Horarios y ubicación</a>
+          <a href="/publicaciones" class="boton">Leer publicaciones</a>
+          <a href="/oraciones" class="enlace-flecha">Oraciones</a>
         </div>
 
         <!-- Nota al margen -->
-        <aside class="mt-14 border-l-2 border-rubrica pl-5" data-revelar style="--i:5">
-          <p class="rotulo text-rubrica">Nota al margen</p>
-          <p class="mt-2 font-texto italic text-tinta-suave">
-            {proxima.titulo}: {proxima.dia.toLowerCase()}, {proxima.hora}, en {sitio.sede}. Las puertas están abiertas.
-          </p>
-        </aside>
+        {proxima && (
+          <aside class="mt-14 border-l-2 border-rubrica pl-5" data-revelar style="--i:5">
+            <p class="rotulo text-rubrica">Nota al margen</p>
+            <p class="mt-2 font-texto italic text-tinta-suave">
+              {proxima.titulo}: {proxima.dia.toLowerCase()}, {proxima.hora}{proxima.lugar && `, en ${proxima.lugar}`}.
+            </p>
+          </aside>
+        )}
       </div>
       <div class="md:col-span-7 md:col-start-6 lg:col-span-7 lg:col-start-6">
-        <Lamina numero={1} pie="La fraternidad reunida en la Parroquia de San Felipe de Jesús." proporcion="aspect-[5/4]" />
+        <Lamina numero={1} pie="Portada." proporcion="aspect-[5/4]" />
       </div>
     </div>
   </section>
@@ -68,7 +66,7 @@ const pasos = [
         <Rubro texto="Sumario" />
         <h2 class="titulo mt-6" data-revelar>En estas páginas</h2>
         <p class="mt-4 max-w-[32ch] text-tinta-suave" data-revelar style="--i:1">
-          Todo lo que necesitas saber para conocernos, leído con calma.
+          Para leer con calma.
         </p>
       </div>
       <ol class="md:col-span-8">
@@ -95,16 +93,16 @@ const pasos = [
         <Rubro numero="—" texto="Editorial" />
       </div>
       <div class="md:col-span-8">
-        <Lineas class="titulo" lineas={['Nuestro nombre es', 'una *promesa*.']} />
+        <Lineas class="titulo" lineas={['Un carisma', 'para *compartir*.']} />
         <div class="capitular columnas-2 mt-10 text-[1.15rem] text-tinta" data-revelar style="--i:2">
           <p>
-            Nos llamamos Caridad Franciscana porque queremos que el amor se note en lo concreto. San Francisco encontró a Cristo cuando bajó del caballo para abrazar a un leproso; desde entonces, sus seguidores sabemos que la fe se prueba en el encuentro con el que sufre.
+            El carisma franciscano es un regalo que no se guarda: se comparte. San Francisco encontró a Cristo cuando bajó del caballo para abrazar a un leproso; desde entonces, quienes lo seguimos sabemos que la fe se prueba en el encuentro con el que sufre.
           </p>
           <p>
-            Por eso, junto con la oración y la formación, salimos a la colonia: llevamos despensas, visitamos enfermos, compartimos abrigo en invierno. No lo hacemos como una institución, sino como hermanos.
+            En estas páginas comparto oraciones, temas de formación, reflexiones y los proyectos de servicio en los que participo. Lo escribo para quien quiera leerlo, sin prisa.
           </p>
           <p>
-            Si buscas una comunidad donde crecer en la fe sin juicios ni apariencias, aquí hay un lugar para ti. No importa de dónde vengas ni cuánto tiempo hayas estado lejos.
+            Si buscas crecer en la fe sin juicios ni apariencias, ojalá algo de lo que encuentres aquí te acompañe. No importa de dónde vengas ni cuánto tiempo hayas estado lejos.
           </p>
         </div>
       </div>
@@ -122,30 +120,6 @@ const pasos = [
     </div>
   </section>
 
-  <!-- ═══ PRIMERA VISITA ═══ -->
-  <section class="contenedor pt-28 md:pt-40">
-    <div class="grid gap-10 md:grid-cols-12 md:gap-8">
-      <div class="md:col-span-4">
-        <Rubro numero="04" texto="Si vienes por primera vez" />
-      </div>
-      <div class="md:col-span-8">
-        <Lineas class="titulo" lineas={['Lo que pasará', 'cuando *llegues*.']} />
-      </div>
-    </div>
-    <ol class="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
-      {pasos.map((p, i) => (
-        <li class="border-t border-tinta pt-6" data-revelar style={`--i:${i}`}>
-          <span class="numeral block text-[4rem] leading-none md:text-[5.5rem]">{p.n}</span>
-          <h3 class="subtitulo mt-6">{p.titulo}</h3>
-          <p class="mt-3 text-tinta-suave">{p.texto}</p>
-        </li>
-      ))}
-    </ol>
-    <div class="mt-12" data-revelar>
-      <a href="/formacion#primera-visita" class="enlace-flecha">Preguntas frecuentes</a>
-    </div>
-  </section>
-
   <!-- ═══ OBRAS ═══ -->
   <section class="contenedor pt-28 md:pt-40">
     <div class="grid gap-10 md:grid-cols-12 md:gap-8">
@@ -157,15 +131,17 @@ const pasos = [
         </div>
       </div>
       <div class="md:col-span-8">
-        <Lamina numero={2} pie="Entrega de despensas a familias de la colonia." proporcion="aspect-[16/9]" />
+        <Lamina numero={2} pie={proyectos[0]?.data.titulo ?? 'Proyectos de servicio.'} src={proyectos[0]?.data.imagen ?? undefined} proporcion="aspect-[16/9]" />
         <ul class="mt-10">
-          {proyectos.slice(0, 3).map((p, i) => (
-            <li class="grid gap-x-8 gap-y-2 border-t border-tinta/15 py-7 md:grid-cols-[1fr_2fr]" data-revelar style={`--i:${i}`}>
-              <div>
-                <h3 class="subtitulo">{p.nombre}</h3>
-                <p class="rotulo mt-2 text-rubrica">{p.frecuencia}</p>
-              </div>
-              <p class="text-tinta-suave">{p.descripcion}</p>
+          {proyectos.map((p, i) => (
+            <li data-revelar style={`--i:${i}`}>
+              <a href={`/proyectos/${p.id}`} class="group grid gap-x-8 gap-y-2 border-t border-tinta/15 py-7 md:grid-cols-[1fr_2fr]">
+                <div>
+                  <h3 class="subtitulo transition-colors duration-500 group-hover:text-rubrica">{p.data.titulo}</h3>
+                  {p.data.frecuencia && <p class="rotulo mt-2 text-rubrica">{p.data.frecuencia}</p>}
+                </div>
+                <p class="text-tinta-suave">{p.data.resumen}</p>
+              </a>
             </li>
           ))}
         </ul>
@@ -178,7 +154,7 @@ const pasos = [
     <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
       <div class="md:w-1/2">
         <Rubro numero="06" texto="Crónica" />
-        <Lineas class="titulo mt-6" lineas={['Lo que vivimos', 'en *fraternidad*.']} />
+        <Lineas class="titulo mt-6" lineas={['Avisos', 'y *crónica*.']} />
       </div>
       <div data-revelar><a href="/noticias" class="enlace-flecha">Todas las noticias</a></div>
     </div>
@@ -197,7 +173,7 @@ const pasos = [
         ))}
       </ul>
     ) : (
-      <p class="mt-12 border-t border-tinta/15 pt-8 text-tinta-suave italic">Muy pronto compartiremos aquí lo que vivimos en la fraternidad.</p>
+      <p class="mt-12 border-t border-tinta/15 pt-8 text-tinta-suave italic">Muy pronto compartiré aquí avisos y noticias.</p>
     )}
   </section>
 

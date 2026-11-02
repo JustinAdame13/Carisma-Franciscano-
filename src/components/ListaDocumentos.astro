@@ -1,0 +1,26 @@
+---
+// Lista de documentos para descargar (enlaces de Drive u otros sitios).
+import { enlacesDocumento, type Documento } from '../lib/documentos';
+interface Props { documentos?: Documento[]; class?: string }
+const { documentos = [], class: clase } = Astro.props;
+const lista = documentos.filter((d) => d.enlace).map(enlacesDocumento);
+---
+{lista.length > 0 && (
+  <section class:list={['mx-auto max-w-[66ch]', clase]} aria-labelledby="titulo-documentos">
+    <h2 id="titulo-documentos" class="rotulo text-rubrica">Documentos para descargar</h2>
+    <ul class="mt-4 border-b border-tinta/15">
+      {lista.map((d) => (
+        <li class="flex flex-col gap-3 border-t border-tinta/15 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p class="font-display text-[1.25rem] leading-snug">{d.nombre}</p>
+            <p class="rotulo mt-1 text-tinta-tenue">{d.tipo}</p>
+          </div>
+          <div class="flex shrink-0 items-center gap-5">
+            <a href={d.ver} target="_blank" rel="noopener" class="enlace-flecha">{d.tipo === 'Carpeta' ? 'Abrir carpeta' : 'Ver'}</a>
+            {d.descargar && <a href={d.descargar} target="_blank" rel="noopener" class="boton px-4! py-2.5!">Descargar</a>}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

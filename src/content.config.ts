@@ -16,6 +16,11 @@ const base = {
   ejemplo: z.boolean().default(false),
 };
 
+// Enlaces a documentos (normalmente de Google Drive). Ver src/lib/documentos.ts
+const documentos = z
+  .array(z.object({ nombre: z.string(), enlace: z.string().url() }))
+  .default([]);
+
 const noticias = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/noticias' }),
   schema: z.object({
@@ -48,6 +53,7 @@ const formacion = defineCollection({
     ...base,
     tema: z.string().default('Espiritualidad'),
     archivo: z.string().optional().nullable(),
+    documentos,
   }),
 });
 
@@ -60,6 +66,7 @@ const oraciones = defineCollection({
     categoria: z.string().default('Oración'),
     resumen: z.string().optional().nullable(),
     ejemplo: z.boolean().default(false),
+    documentos,
   }),
 });
 

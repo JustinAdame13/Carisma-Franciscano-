@@ -31,6 +31,9 @@ const oraciones = (await getCollection('oraciones')).sort((a, b) => b.data.fecha
               <h2 class="subtitulo mt-2 transition-colors duration-500 group-hover:text-rubrica">{o.data.titulo}</h2>
               {o.data.resumen && <p class="mt-3 flex-1 text-[1rem] opacity-80">{o.data.resumen}</p>}
               {o.data.fuente && <p class="mt-5 font-texto italic opacity-75">— {o.data.fuente}</p>}
+              {o.data.documentos.length > 0 && (
+                <p class="rotulo mt-4 opacity-70">{o.data.documentos.length === 1 ? '1 documento' : `${o.data.documentos.length} documentos`} para descargar</p>
+              )}
             </a>
           </article>
         ))}

@@ -24,6 +24,23 @@ const camposDePublicacion = (carpeta: string) => ({
   contenido: fields.markdoc({ label: 'Contenido', extension: 'md' }),
 });
 
+/*
+  Documentos para descargar: el cliente pega el enlace de Google Drive (o de
+  cualquier otro sitio). El archivo no se guarda en el repositorio, así que
+  no hay límite de tamaño y se puede reemplazar desde Drive sin tocar el sitio.
+*/
+const camposDeDocumentos = fields.array(
+  fields.object({
+    nombre: fields.text({ label: 'Nombre del documento', validation: { length: { min: 1 } } }),
+    enlace: fields.url({
+      label: 'Enlace',
+      description: 'En Drive: Compartir → "Cualquier persona con el enlace" → Copiar enlace.',
+      validation: { isRequired: true },
+    }),
+  }),
+  { label: 'Documentos para descargar', itemLabel: (p) => p.fields.nombre.value || 'Documento' },
+);
+
 export default config({
   storage: import.meta.env.PROD
   ? { kind: 'github', repo: 'JustinAdame13/Carisma-Franciscano-' }
@@ -120,6 +137,7 @@ export default config({
           directory: 'public/documentos',
           publicPath: '/documentos/',
         }),
+        documentos: camposDeDocumentos,
       },
     }),
     oraciones: collection({
@@ -145,6 +163,7 @@ export default config({
         }),
         resumen: fields.text({ label: 'Nota breve (opcional)', description: 'Para qué momento es o una intención. Aparece en la lista.', multiline: true }),
         ejemplo: fields.checkbox({ label: 'Es contenido de ejemplo', description: 'Márcalo solo en oraciones de prueba.', defaultValue: false }),
+        documentos: camposDeDocumentos,
         contenido: fields.markdoc({ label: 'Texto de la oración', extension: 'md' }),
       },
     }),

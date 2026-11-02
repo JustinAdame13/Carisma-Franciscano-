@@ -1,0 +1,50 @@
+---
+import Base from '../../../../layouts/Base.astro';
+import SubnavOraciones from '../../../../components/SubnavOraciones.astro';
+import CelebracionLiturgica from '../../../../components/CelebracionLiturgica.astro';
+import { BASE, FUENTE, MESES, calendario, diasConCelebracion, fechaTexto, urlDia } from '../../../../lib/liturgia';
+
+// Una página por cada día del año que tiene alguna celebración franciscana.
+export function getStaticPaths() {
+  return diasConCelebracion().map(({ mes, dia }) => ({ params: { mes: MESES[mes - 1], dia: String(dia) }, props: { mes, dia } }));
+}
+
+const { mes, dia } = Astro.props;
+const entradas = calendario.filter((e) => e.mes === mes && e.dia === dia);
+const fecha = fechaTexto({ mes, dia });
+const dias = diasConCelebracion();
+const i = dias.findIndex((d) => d.mes === mes && d.dia === dia);
+const anterior = dias[(i - 1 + dias.length) % dias.length];
+const siguiente = dias[(i + 1) % dias.length];
+---
+<Base titulo={`${fecha} · Liturgia de las Horas`} descripcion={`Liturgia de las Horas franciscana del ${fecha}: ${entradas.map((e) => e.nombre).join('; ')}.`}>
+  <div class="pt-8 md:pt-12"><SubnavOraciones activa="liturgia" /></div>
+
+  <header class="contenedor pt-12 pb-6 text-center md:pt-16">
+    <a href={`${BASE}/`} class="rotulo text-tinta-suave transition-colors hover:text-rubrica" data-revelar>← Calendario</a>
+    <p class="numeral mt-8 text-[clamp(4rem,10vw,7.5rem)] leading-[0.85]" data-revelar>{dia}</p>
+    <p class="rotulo mt-3 text-tinta-suave" data-revelar style="--i:1">{MESES[mes - 1]}</p>
+    <p class="mt-4 font-texto italic text-tinta-suave" data-revelar style="--i:2" data-hoy-aviso hidden>Hoy</p>
+  </header>
+
+  <div class="contenedor space-y-24 py-10 md:space-y-32">
+    {entradas.map((e) => <CelebracionLiturgica entrada={e} fecha={fecha} />)}
+  </div>
+
+  <nav class="contenedor mt-10 flex items-center justify-between gap-6 border-t border-tinta/15 py-8" aria-label="Otros días">
+    <a href={urlDia(anterior.mes, anterior.dia)} class="enlace-flecha flex-row-reverse [&::after]:content-['←']">{fechaTexto(anterior)}</a>
+    <a href={urlDia(siguiente.mes, siguiente.dia)} class="enlace-flecha">{fechaTexto(siguiente)}</a>
+  </nav>
+  <p class="contenedor pb-20 font-texto text-[0.9rem] italic text-tinta-tenue">Textos: {FUENTE}.</p>
+
+  <script is:inline define:vars={{ mes, dia }}>
+    // Marca "Hoy" si la página corresponde a la fecha del visitante.
+    (function () {
+      var h = new Date();
+      if (h.getMonth() + 1 === mes && h.getDate() === dia) {
+        var el = document.querySelector('[data-hoy-aviso]');
+        if (el) el.hidden = false;
+      }
+    })();
+  </script>
+</Base>

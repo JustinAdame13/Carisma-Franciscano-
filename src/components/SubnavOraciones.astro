@@ -1,0 +1,29 @@
+---
+// Pestañas de la sección Oraciones: oraciones sueltas y Liturgia de las Horas.
+import { BASE } from '../lib/liturgia';
+interface Props { activa: 'oraciones' | 'liturgia' | 'himnos' }
+const { activa } = Astro.props;
+const pestanas = [
+  { id: 'oraciones', texto: 'Oraciones', href: '/oraciones' },
+  { id: 'liturgia', texto: 'Liturgia de las Horas', href: `${BASE}/` },
+  { id: 'himnos', texto: 'Himnos', href: `${BASE}/himnos/` },
+];
+---
+<nav class="contenedor" aria-label="Secciones de Oraciones">
+  <ul class="flex flex-wrap gap-x-8 gap-y-2 border-b border-tinta/15">
+    {pestanas.map((p) => (
+      <li>
+        <a
+          href={p.href}
+          aria-current={p.id === activa ? 'page' : undefined}
+          class:list={[
+            'relative -mb-px block border-b py-3 font-ui text-[0.74rem] font-semibold tracking-[0.13em] uppercase transition-colors',
+            p.id === activa ? 'border-rubrica text-rubrica' : 'border-transparent text-tinta-suave hover:text-rubrica',
+          ]}
+        >
+          {p.texto}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

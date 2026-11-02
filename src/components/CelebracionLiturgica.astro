@@ -1,0 +1,49 @@
+---
+// Una celebración del Propio franciscano: encabezado, semblanza y oficio, sobre papiro.
+// El HTML del oficio sale del script que convierte los PDF (scripts/liturgia).
+import Tau from './Tau.astro';
+import { celebracion, expandir, type Entrada } from '../lib/liturgia';
+interface Props { entrada: Entrada; fecha: string }
+const { entrada, fecha } = Astro.props;
+const c = celebracion(entrada.celebracion);
+const ancla = entrada.celebracion ?? entrada.nombre;
+// Prefijo para que los anclajes (#laudes, #visperas…) no choquen si hay dos celebraciones el mismo día.
+const pref = c?.id ?? '';
+const conPrefijo = (h: string) => h.replace(/id="/g, `id="${pref}--`);
+---
+<article id={ancla} class="papiro rollo mx-auto max-w-[860px] px-6 py-14 sm:px-12 md:px-16 md:py-20" style="scroll-margin-top: 6rem">
+  <header class="text-center">
+    <p class="rotulo">{fecha}</p>
+    <Tau class="mx-auto mt-5 h-7 w-auto text-rubrica" />
+    <h2 class="mx-auto mt-5 max-w-[24ch] font-display text-[clamp(1.9rem,4vw,2.9rem)] leading-[1.08] tracking-[-0.02em]" style="font-weight:380">{entrada.nombre}</h2>
+    {entrada.rangos.length > 0 && (
+      <ul class="mt-5 space-y-1 font-texto text-[0.98rem] italic text-rubrica">
+        {entrada.rangos.map((r) => <li>{expandir(r)}</li>)}
+      </ul>
+    )}
+  </header>
+
+  {c ? (
+    <>
+      {c.horas.length > 0 && (
+        <nav class="mt-10 flex flex-wrap justify-center gap-x-5 gap-y-2" aria-label="Horas">
+          {c.horas.map((h) => (
+            <a href={`#${pref}--${h.id}`} class="font-ui text-[0.72rem] font-semibold tracking-[0.14em] uppercase text-tinta-suave transition-colors hover:text-rubrica">{h.titulo}</a>
+          ))}
+        </nav>
+      )}
+      {c.semblanza && <div class="oficio semblanza mt-10" set:html={c.semblanza} />}
+      {c.oficio && <div class="oficio" set:html={conPrefijo(c.oficio)} />}
+      {c.latin && (
+        <details class="oficio mt-14 border-t border-rubrica/25 pt-6">
+          <summary class="cursor-pointer text-center font-ui text-[0.74rem] font-semibold tracking-[0.16em] uppercase text-rubrica">Himnos latinos propios</summary>
+          <div class="mt-6" set:html={c.latin} />
+        </details>
+      )}
+    </>
+  ) : (
+    <p class="mx-auto mt-10 max-w-[44ch] text-center italic opacity-80">
+      Esta celebración no tiene textos propios en el Propio franciscano: se reza con los textos del común correspondiente.
+    </p>
+  )}
+</article>

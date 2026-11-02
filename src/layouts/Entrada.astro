@@ -15,8 +15,10 @@ interface Props {
   ejemplo?: boolean;
   archivo?: string | null;
   volver: { texto: string; href: string };
+  /** Muestra el texto sobre una hoja de papiro (sección Oraciones). */
+  papiro?: boolean;
 }
-const { titulo, resumen, fecha, etiqueta, imagen, ejemplo, archivo, volver } = Astro.props;
+const { titulo, resumen, fecha, etiqueta, imagen, ejemplo, archivo, volver, papiro = false } = Astro.props;
 ---
 <Base titulo={titulo} descripcion={resumen || undefined}>
   <article>
@@ -41,8 +43,10 @@ const { titulo, resumen, fecha, etiqueta, imagen, ejemplo, archivo, volver } = A
     )}
 
     <div class="contenedor pt-14 pb-10">
-      <div class="prosa mx-auto" data-revelar>
-        <slot />
+      <div class:list={[papiro && 'papiro rollo mx-auto max-w-[760px] px-6 py-14 sm:px-12 md:py-16']} data-revelar>
+        <div class:list={['prosa mx-auto', papiro && 'oracion-texto']}>
+          <slot />
+        </div>
       </div>
       <slot name="despues" />
       {archivo && (

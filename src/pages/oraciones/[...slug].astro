@@ -18,9 +18,10 @@ const { Content } = await render(entrada);
   etiqueta={entrada.data.categoria}
   ejemplo={entrada.data.ejemplo}
   volver={{ texto: 'Volver a Oraciones', href: '/oraciones' }}
+  papiro
 >
   <Content />
   {entrada.data.fuente && (
-    <p slot="despues" class="mx-auto mt-10 max-w-[66ch] font-texto text-[1.1rem] italic text-tinta-suave">— {entrada.data.fuente}</p>
+    <p slot="despues" class="mx-auto mt-10 max-w-[66ch] text-center font-texto text-[1.1rem] italic text-tinta-suave">— {entrada.data.fuente}</p>
   )}
 </Entrada>

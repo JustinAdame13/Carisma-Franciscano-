@@ -2,34 +2,35 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Portadilla from '../../components/Portadilla.astro';
+import SubnavOraciones from '../../components/SubnavOraciones.astro';
 import Cita from '../../components/Cita.astro';
 import Invitacion from '../../components/Invitacion.astro';
+import { BASE } from '../../lib/liturgia';
 
 // Las oraciones se agregan desde el panel /keystatic (Publicar → Oraciones). Más recientes primero.
 const oraciones = (await getCollection('oraciones')).sort((a, b) => b.data.fecha.valueOf() - a.data.fecha.valueOf());
 ---
-<Base titulo="Oraciones" descripcion="Oraciones franciscanas para cada momento del día y de la vida.">
+<Base titulo="Oraciones" descripcion="Oraciones franciscanas para cada momento del día y de la vida, y la Liturgia de las Horas del Propio franciscano.">
   <Portadilla
     href="/oraciones"
     lineas={['Orar con las palabras', 'de los *santos*.']}
     entrada="Oraciones de San Francisco, de Santa Clara y de la tradición franciscana, para rezar despacio en cualquier momento del día."
   />
+  <SubnavOraciones activa="oraciones" />
 
-  <section class="contenedor">
+  <section class="contenedor pt-16 md:pt-20">
     {oraciones.length > 0 ? (
-      <div class="grid gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3">
+      <div class="grid gap-x-10 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
         {oraciones.map((o, i) => (
-          <article class="group border-t border-tinta pt-6" data-revelar style={`--i:${i % 3}`}>
-            <a href={`/oraciones/${o.id}`} class="block">
-              <span class="numeral block text-[3.4rem] leading-none transition-transform duration-700 ease-[var(--ease-suave)] group-hover:-translate-y-1">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <p class="rotulo mt-6 text-rubrica">
-                {o.data.categoria}{o.data.ejemplo && <span class="ml-2 text-tinta-tenue">· ejemplo</span>}
+          <article data-revelar style={`--i:${i % 3}`}>
+            <a href={`/oraciones/${o.id}`} class="papiro group flex h-full flex-col px-7 pt-8 pb-9 transition-transform duration-700 ease-[var(--ease-suave)] hover:-translate-y-1">
+              <span class="numeral block text-[2.8rem] leading-none">{String(i + 1).padStart(2, '0')}</span>
+              <p class="rotulo mt-5 text-rubrica!">
+                {o.data.categoria}{o.data.ejemplo && <span class="ml-2 opacity-60">· ejemplo</span>}
               </p>
               <h2 class="subtitulo mt-2 transition-colors duration-500 group-hover:text-rubrica">{o.data.titulo}</h2>
-              {o.data.resumen && <p class="mt-3 text-tinta-suave">{o.data.resumen}</p>}
-              {o.data.fuente && <p class="mt-4 font-texto italic text-tinta-suave">— {o.data.fuente}</p>}
+              {o.data.resumen && <p class="mt-3 flex-1 text-[1rem] opacity-80">{o.data.resumen}</p>}
+              {o.data.fuente && <p class="mt-5 font-texto italic opacity-75">— {o.data.fuente}</p>}
             </a>
           </article>
         ))}
@@ -37,8 +38,24 @@ const oraciones = (await getCollection('oraciones')).sort((a, b) => b.data.fecha
     ) : (
       <p class="lede border-t border-tinta/15 pt-10 italic">Muy pronto compartiré aquí oraciones franciscanas.</p>
     )}
+  </section>
 
-    <div class="mt-28 max-w-[44rem]">
+  <!-- Acceso a la Liturgia de las Horas -->
+  <section class="contenedor pt-28 md:pt-36">
+    <a href={`${BASE}/`} class="group grid items-end gap-8 border-t border-tinta pt-8 md:grid-cols-12" data-revelar>
+      <div class="md:col-span-7">
+        <p class="rotulo text-rubrica">Liturgia de las Horas</p>
+        <h2 class="titulo mt-4 transition-colors duration-500 group-hover:text-rubrica">Los santos franciscanos, <em>día con día</em>.</h2>
+      </div>
+      <div class="md:col-span-5">
+        <p class="text-tinta-suave">El Propio de la Familia Franciscana: Oficio de lectura, Laudes y Vísperas de cada celebración. La página muestra sola la de hoy.</p>
+        <span class="enlace-flecha mt-5">Ir al calendario</span>
+      </div>
+    </a>
+  </section>
+
+  <section class="contenedor pt-24">
+    <div class="max-w-[44rem]">
       <Cita autor="1 Tesalonicenses 5,17">Oren sin cesar.</Cita>
     </div>
   </section>

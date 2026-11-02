@@ -1,0 +1,21 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Portadilla from '../../../components/Portadilla.astro';
+import SubnavOraciones from '../../../components/SubnavOraciones.astro';
+import { FUENTE, himnos } from '../../../lib/liturgia';
+---
+<Base titulo="Himnos franciscanos" descripcion="Himnos para el oficio ordinario y para el común de los santos franciscanos.">
+  <Portadilla href="/oraciones" lineas={['Himnos para', 'cantar la *alabanza*.']} entrada="Himnos para el oficio ordinario y para el común de los santos franciscanos, a los que remiten muchas celebraciones." />
+  <SubnavOraciones activa="himnos" />
+  <div class="contenedor py-16">
+    <article class="papiro rollo mx-auto max-w-[860px] px-6 py-14 sm:px-12 md:px-16 md:py-20">
+      <nav class="flex flex-wrap justify-center gap-x-5 gap-y-2" aria-label="Apartados">
+        {himnos.horas.filter((h) => !/laudes|visperas/.test(h.id)).map((h) => (
+          <a href={`#${h.id}`} class="font-ui text-[0.72rem] font-semibold tracking-[0.14em] uppercase text-tinta-suave transition-colors hover:text-rubrica">{h.titulo}</a>
+        ))}
+      </nav>
+      <div class="oficio" set:html={himnos.html} />
+    </article>
+  </div>
+  <p class="contenedor pb-20 font-texto text-[0.9rem] italic text-tinta-tenue">Textos: {FUENTE}.</p>
+</Base>

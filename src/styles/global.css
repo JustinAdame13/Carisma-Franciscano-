@@ -161,6 +161,124 @@
   }
 }
 
+/* ── Papiro: la "hoja" de la sección Oraciones ────────────────
+   Fibras horizontales y verticales (así se fabrica el papiro: dos
+   capas de tiras cruzadas), manchas de tiempo y bordes tostados.
+   Todo es CSS y SVG en línea: no hay imágenes que descargar.
+   ─────────────────────────────────────────────────────────── */
+@layer components {
+  .papiro {
+    --papiro: #ead8ad;
+    --papiro-tinta: #34241a;
+    --papiro-borde: rgb(122 78 32 / 0.55);
+    position: relative;
+    color: var(--papiro-tinta);
+    background-color: var(--papiro);
+    background-image:
+      radial-gradient(ellipse 70% 50% at 25% 15%, rgb(255 248 228 / 0.55), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 85% 80%, rgb(150 98 40 / 0.16), transparent 70%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='h'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.004 .55' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .27 0 0 0 0 .1 0 0 0 .32 -.08'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23h)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='v'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6 .006' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .34 0 0 0 0 .14 0 0 0 .18 -.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23v)'/%3E%3C/svg%3E");
+    border-radius: 3px 7px 4px 9px / 8px 3px 9px 4px;
+    box-shadow:
+      inset 0 0 0 1px rgb(110 70 28 / 0.18),
+      inset 0 0 28px var(--papiro-borde),
+      inset 0 0 90px rgb(150 100 40 / 0.22),
+      0 1px 0 rgb(255 255 255 / 0.4),
+      0 22px 40px -26px rgb(60 35 10 / 0.55);
+  }
+  .papiro ::selection { background: var(--color-rubrica); color: var(--papiro); }
+
+  /* Rollo: varillas de madera arriba y abajo de la hoja */
+  .papiro.rollo { margin-block: 22px; }
+  .papiro.rollo::before,
+  .papiro.rollo::after {
+    content: '';
+    position: absolute;
+    left: -14px;
+    right: -14px;
+    height: 20px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #4a2f19 0%, #8a5a31 30%, #b98451 48%, #7a4c27 72%, #3c2412 100%);
+    box-shadow: 0 6px 12px -6px rgb(40 22 8 / 0.6);
+  }
+  .papiro.rollo::before { top: -14px; }
+  .papiro.rollo::after { bottom: -14px; }
+
+  /* Texto escrito sobre papiro */
+  .papiro .prosa,
+  .papiro .oficio { color: var(--papiro-tinta); }
+  .papiro .rotulo { color: rgb(52 36 26 / 0.7); }
+
+  /* ── Texto litúrgico ──────────────────────────────────────── */
+  .oficio {
+    @apply mx-auto max-w-[62ch] text-[1.15rem] leading-[1.7];
+  }
+  .oficio > * + * { margin-top: 1em; }
+  .oficio .r { color: var(--color-rubrica); }
+  .oficio .hora {
+    @apply font-display text-rubrica;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3.2rem;
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    font-style: italic;
+    font-weight: 380;
+    text-align: center;
+    scroll-margin-top: 6rem;
+  }
+  .oficio .hora::before,
+  .oficio .hora::after { content: ''; flex: 1; height: 1px; background: currentColor; opacity: 0.35; }
+  .oficio .seccion {
+    @apply font-ui text-rubrica;
+    margin-top: 3.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    scroll-margin-top: 6rem;
+  }
+  .oficio .hora-menor {
+    @apply font-display text-rubrica;
+    margin-top: 1.8rem;
+    font-size: 1.3rem;
+    font-style: italic;
+  }
+  .oficio .rubro {
+    @apply font-ui text-rubrica;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    margin-top: 2rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid rgb(163 64 42 / 0.25);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+  }
+  .oficio .rubro .ref { font-family: var(--font-texto); font-size: 0.95rem; font-weight: 400; font-style: italic; letter-spacing: 0; }
+  .oficio .subrubro { @apply font-display text-rubrica; margin-top: 1.6rem; text-align: center; font-size: 1.15rem; font-style: italic; font-weight: 400; }
+  .oficio .titulo-lectura { @apply font-display text-rubrica; text-align: center; font-style: italic; font-size: 1.2rem; }
+  .oficio .nota { font-size: 0.98rem; font-style: italic; color: var(--color-rubrica); }
+  .oficio .centrada { text-align: center; }
+  .oficio .verso { padding-left: clamp(0.5rem, 6vw, 3rem); line-height: 1.6; }
+  .oficio .verso .sangria { display: inline-block; padding-left: 1.6em; }
+
+  /* Semblanza del santo, con capitular */
+  .semblanza > p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--font-display);
+    font-size: 3.9em;
+    line-height: 0.82;
+    font-weight: 350;
+    color: var(--color-rubrica);
+    padding: 0.06em 0.12em 0 0;
+  }
+}
+
 /* ── Utilidades tipográficas (se pueden usar con @apply y con md:, lg:, etc.) */
 @utility display-xl {
     font-family: var(--font-display);
@@ -291,3 +409,9 @@
   @keyframes desvanecer { to { opacity: 0; } }
   @keyframes aparecer { from { opacity: 0; transform: translateY(12px); } }
 }
+
+/* Oración suelta sobre papiro: centrada, como se reza */
+.oracion-texto { text-align: center; font-size: 1.3rem; line-height: 1.75; }
+/* Respeta los saltos de renglón tal como se escribieron en el panel */
+.oracion-texto p { white-space: pre-line; }
+.oracion-texto > p:first-of-type::first-letter { float: none; font-size: inherit; padding: 0; color: inherit; }

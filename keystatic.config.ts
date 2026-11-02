@@ -26,8 +26,8 @@ const camposDePublicacion = (carpeta: string) => ({
 
 export default config({
   storage: import.meta.env.PROD
-    ? { kind: 'github', repo: 'JustinAdame13/Carisma-Franciscano-' }
-    : { kind: 'local' },
+  ? { kind: 'github', repo: 'JustinAdame13/Carisma-Franciscano-' }
+  : { kind: 'local' },
   ui: {
     brand: { name: 'Carisma Franciscano' },
     navigation: {

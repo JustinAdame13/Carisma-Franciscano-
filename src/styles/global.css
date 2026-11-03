@@ -415,3 +415,7 @@
 /* Respeta los saltos de renglón tal como se escribieron en el panel */
 .oracion-texto p { white-space: pre-line; }
 .oracion-texto > p:first-of-type::first-letter { float: none; font-size: inherit; padding: 0; color: inherit; }
+
+/* Grabados (ilustraciones a tinta sobre fondo blanco): el blanco se funde con
+   el color del papel que tengan detrás, como si estuvieran impresos ahí. */
+.grabado img { mix-blend-mode: multiply; }

@@ -23,7 +23,7 @@ const hayContacto = Boolean(whatsapp || sitio.correo || sitio.facebook || sitio.
 
     <span class="mt-16 block h-px w-full bg-papel/20" data-regla></span>
 
-    <div class="grid gap-12 pt-12 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="grid gap-12 pt-12 sm:grid-cols-2 lg:grid-cols-3">
       {hayLugar && (
         <div data-revelar>
           <p class="rotulo text-rubrica">Dónde</p>
@@ -33,19 +33,6 @@ const hayContacto = Boolean(whatsapp || sitio.correo || sitio.facebook || sitio.
             {sitio.direccion && <span class="text-[1rem]">{sitio.direccion}</span>}
           </a>
         </div>
-      )}
-      {sitio.reuniones.length > 0 && (
-      <div data-revelar style="--i:1">
-        <p class="rotulo text-rubrica">Cuándo</p>
-        <ul class="mt-4 space-y-3">
-          {sitio.reuniones.map((r) => (
-            <li>
-              <p class="font-display text-[1.15rem] leading-tight">{r.titulo}</p>
-              <p class="text-[0.95rem] text-papel/65">{r.dia} · {r.hora}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
       )}
       <div data-revelar style="--i:2">
         <p class="rotulo text-rubrica">Sumario</p>

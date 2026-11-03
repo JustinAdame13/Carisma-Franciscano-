@@ -188,16 +188,6 @@ export default config({
         correo: fields.text({ label: 'Correo electrónico' }),
         facebook: fields.url({ label: 'Facebook (enlace)' }),
         instagram: fields.url({ label: 'Instagram (enlace)' }),
-        reuniones: fields.array(
-          fields.object({
-            titulo: fields.text({ label: 'Actividad' }),
-            dia: fields.text({ label: 'Día' }),
-            hora: fields.text({ label: 'Hora' }),
-            lugar: fields.text({ label: 'Lugar' }),
-            descripcion: fields.text({ label: 'Descripción', multiline: true }),
-          }),
-          { label: 'Horarios (opcional)', itemLabel: (p) => `${p.fields.titulo.value} · ${p.fields.dia.value}` },
-        ),
       },
     }),
   },

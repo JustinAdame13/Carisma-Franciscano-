@@ -43,20 +43,20 @@ src/
 ├── components/       ← piezas que se reutilizan (Header, Footer, Tau, Lineas, Rubro, Lamina, Cita…)
 ├── content/          ← noticias, publicaciones, proyectos, formacion y oraciones en Markdown (.md)
 ├── data/             ← datos editables desde el panel
-│   ├── sitio.json          → nombre, contacto, horarios, aviso de "en construcción"
+│   ├── sitio.json          → nombre, contacto, aviso de "en construcción"
 │   └── navegacion.ts       → opciones del menú y créditos
 └── styles/global.css ← colores, tipografías y estilos del sistema de diseño
 keystatic.config.ts   ← qué se puede editar desde el panel
 ```
 
-Los **datos de contacto** se escriben una sola vez en `src/data/sitio.json` y solo se muestran en el pie de página (el enlace `#contacto` lleva ahí desde cualquier página). Lugar, dirección y horarios son opcionales: si están vacíos, esa columna no aparece.
+Los **datos de contacto** se escriben una sola vez en `src/data/sitio.json` y solo se muestran en el pie de página (el enlace `#contacto` lleva ahí desde cualquier página). Lugar y dirección son opcionales: si están vacíos, esa columna no aparece.
 
 ## Cómo se edita el contenido
 
 Desde el panel `/keystatic` se pueden:
 
 - Publicar **Publicaciones**, **Noticias**, **Proyectos**, **Formación** y **Oraciones** (título, fecha, resumen, imagen y texto).
-- Cambiar los **datos del sitio**: WhatsApp, correo, redes y horarios.
+- Cambiar los **datos del sitio**: WhatsApp, correo y redes.
 
 Cuando haya número de WhatsApp o correo, los botones de contacto del pie de página aparecen solos.
 
@@ -80,7 +80,6 @@ Cuando todo el contenido sea real, desmarca **"Mostrar aviso de sitio en constru
 Todo lo marcado con `PENDIENTE` en el código, más:
 
 - [ ] WhatsApp, correo y redes sociales
-- [ ] Horarios (o borrarlos si no se usarán)
 - [ ] Proyectos, formación y oraciones reales
 - [ ] Fotos: guardar cada foto en `public/imagenes/` y agregar `src="/imagenes/..."` a su `<Lamina>`
 - [ ] Borrar las entradas de ejemplo (las que tienen "Es contenido de ejemplo")

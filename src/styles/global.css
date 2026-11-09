@@ -448,9 +448,9 @@ html.oscuro .bg-noche {
 /* Grabados (ilustraciones a tinta sobre fondo blanco): el blanco se funde con
    el color del papel que tengan detrás, como si estuvieran impresos ahí. */
 .grabado img { mix-blend-mode: multiply; }
-/* En modo noche se invierte el grabado (fondo blanco → negro, trazo negro → claro)
-   y "screen" funde el negro con el fondo oscuro, igual que multiply lo hacía con el blanco. */
-html.oscuro .grabado img { filter: invert(1) hue-rotate(180deg); mix-blend-mode: screen; }
+/* En modo noche las imágenes se muestran tal cual son: "multiply" sobre un fondo
+   oscuro las volvería casi negras. Solo se bajan un poco de brillo para que no deslumbren. */
+html.oscuro .grabado img { mix-blend-mode: normal; filter: brightness(0.92); }
 
 /* Botón de modo noche: muestra la luna de día y el sol de noche */
 .boton-tema .icono-sol { display: none; }

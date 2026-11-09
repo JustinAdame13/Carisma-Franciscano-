@@ -30,6 +30,35 @@
   --ease-suave: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/*
+  ── Modo noche ─────────────────────────────────────────────
+  Tailwind convierte cada color del @theme en una variable CSS
+  (bg-papel → var(--color-papel)). Si redefinimos esas variables
+  cuando <html> tiene la clase .oscuro, TODO el sitio cambia de
+  color sin tocar ningún componente: el papel se vuelve tinta y
+  la tinta se vuelve papel.
+*/
+html.oscuro {
+  color-scheme: dark;
+  --color-papel: #1c1915;
+  --color-papel-claro: #24201b;
+  --color-papel-hondo: #2b261f;
+  --color-tinta: #f0e9dc;
+  --color-tinta-suave: #c3b7a7;
+  --color-tinta-tenue: #978b7c;
+  --color-rubrica: #e07a62; /* el rojo original casi no se lee sobre fondo oscuro */
+  --color-olivo: #9aa77c;
+  --color-noche: #0f0d0b;
+}
+/* Las secciones que ya eran oscuras (footer, menú, franja de la portada)
+   conservan los colores originales por dentro, para que su texto claro
+   no se vuelva oscuro. Las variables se heredan, así que basta con
+   "regresarlas" en el contenedor. */
+html.oscuro .bg-noche {
+  --color-papel: #f5f0e6;
+  --color-tinta: #1f1b16;
+}
+
 /* ── Base ─────────────────────────────────────────────────── */
 @layer base {
   html {
@@ -419,3 +448,11 @@
 /* Grabados (ilustraciones a tinta sobre fondo blanco): el blanco se funde con
    el color del papel que tengan detrás, como si estuvieran impresos ahí. */
 .grabado img { mix-blend-mode: multiply; }
+/* En modo noche se invierte el grabado (fondo blanco → negro, trazo negro → claro)
+   y "screen" funde el negro con el fondo oscuro, igual que multiply lo hacía con el blanco. */
+html.oscuro .grabado img { filter: invert(1) hue-rotate(180deg); mix-blend-mode: screen; }
+
+/* Botón de modo noche: muestra la luna de día y el sol de noche */
+.boton-tema .icono-sol { display: none; }
+html.oscuro .boton-tema .icono-sol { display: block; }
+html.oscuro .boton-tema .icono-luna { display: none; }

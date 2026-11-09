@@ -38,6 +38,22 @@ const canonica = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonica} />
     <!-- Marca que hay JavaScript: solo así se ocultan los elementos que luego aparecen animados -->
     <script is:inline>document.documentElement.classList.add('js');</script>
+    <!--
+      Modo noche: se aplica aquí, en el <head> y antes de que se pinte la página,
+      para que no haya un "parpadeo" blanco al cargar. Si la persona ya eligió un
+      modo, se respeta (localStorage); si no, se usa el que tenga su dispositivo.
+    -->
+    <script is:inline>
+      window.aplicarTema = function () {
+        var guardado = null;
+        try { guardado = localStorage.getItem('tema'); } catch (e) {}
+        var oscuro = guardado ? guardado === 'oscuro' : matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('oscuro', oscuro);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', oscuro ? '#1c1915' : '#f5f0e6');
+      };
+      window.aplicarTema();
+    </script>
     <ClientRouter fallback="none" />
   </head>
   <body>
@@ -94,6 +110,23 @@ const canonica = new URL(Astro.url.pathname, Astro.site);
             abrir?.focus();
           }
         };
+        // 4. Botón de modo noche (hay uno en celular y otro en escritorio)
+        document.querySelectorAll<HTMLButtonElement>('[data-boton-tema]').forEach((boton) => {
+          const actualizarEtiqueta = () => {
+            const oscuro = document.documentElement.classList.contains('oscuro');
+            boton.setAttribute('aria-label', oscuro ? 'Cambiar a modo día' : 'Cambiar a modo noche');
+            boton.title = oscuro ? 'Modo día' : 'Modo noche';
+          };
+          actualizarEtiqueta();
+          boton.addEventListener('click', () => {
+            const oscuro = !document.documentElement.classList.contains('oscuro');
+            try { localStorage.setItem('tema', oscuro ? 'oscuro' : 'claro'); } catch {}
+            (window as any).aplicarTema();
+            document.querySelectorAll('[data-boton-tema]').forEach((b) => b.dispatchEvent(new Event('tema-cambiado')));
+          });
+          boton.addEventListener('tema-cambiado', actualizarEtiqueta);
+        });
+
         abrir?.addEventListener('click', () => alternar(true));
         cerrar?.addEventListener('click', () => alternar(false));
         menu?.addEventListener('keydown', (e) => e.key === 'Escape' && alternar(false));
@@ -102,7 +135,11 @@ const canonica = new URL(Astro.url.pathname, Astro.site);
       document.addEventListener('astro:page-load', iniciar);
       document.addEventListener('astro:before-swap', () => (document.body.style.overflow = ''));
       // Al cambiar de página, la etiqueta <html> se reemplaza: volvemos a marcar que hay JS.
-      document.addEventListener('astro:after-swap', () => document.documentElement.classList.add('js'));
+      // Lo mismo con el modo noche, si no la página nueva llegaría en modo día.
+      document.addEventListener('astro:after-swap', () => {
+        document.documentElement.classList.add('js');
+        (window as any).aplicarTema();
+      });
     </script>
   </body>
 </html>

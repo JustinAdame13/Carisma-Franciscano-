@@ -1,5 +1,6 @@
 ---
 import Tau from './Tau.astro';
+import BotonTema from './BotonTema.astro';
 import sitio from '../data/sitio.json';
 import { navegacion } from '../data/navegacion';
 
@@ -25,6 +26,8 @@ const esActiva = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWit
         Carisma <em class="italic" style="font-weight:330">Franciscano</em>
       </span>
     </a>
+    <div class="flex items-center gap-2 md:hidden">
+    <BotonTema />
     <button
       id="abrir-menu"
       type="button"
@@ -34,6 +37,7 @@ const esActiva = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWit
     >
       Menú <span class="flex flex-col gap-[5px]" aria-hidden="true"><span class="block h-px w-6 bg-tinta"></span><span class="block h-px w-6 bg-tinta"></span></span>
     </button>
+    </div>
   </div>
 </header>
 
@@ -60,6 +64,7 @@ const esActiva = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWit
         </li>
       ))}
     </ul>
+    <BotonTema class="absolute right-3 sm:right-6 lg:right-10" />
   </div>
 </nav>
 

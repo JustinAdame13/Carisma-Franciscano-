@@ -1,13 +1,13 @@
 ---
 import Tau from './Tau.astro';
-import sitio from '../data/sitio.json';
+import { sitio } from '../lib/sitio';
 import { navegacion, CREDITOS } from '../data/navegacion';
 import { enlaceWhatsApp, enlaceMapa } from '../lib/utilidades';
 
 const whatsapp = enlaceWhatsApp();
 const anio = new Date().getFullYear();
 // El contacto vive solo aquí. Otras páginas enlazan a "#contacto".
-const hayLugar = Boolean(sitio.sede || sitio.direccion);
+const hayLugar = Boolean(enlaceMapa);
 const hayContacto = Boolean(whatsapp || sitio.correo || sitio.facebook || sitio.instagram);
 ---
 <footer id="contacto" class="bg-noche text-papel">
@@ -27,7 +27,7 @@ const hayContacto = Boolean(whatsapp || sitio.correo || sitio.facebook || sitio.
       {hayLugar && (
         <div data-revelar>
           <p class="rotulo text-rubrica">Dónde</p>
-          <a href={enlaceMapa} target="_blank" rel="noopener" class="mt-4 block text-papel/85 transition-colors hover:text-papel">
+          <a href={enlaceMapa ?? undefined} target="_blank" rel="noopener" class="mt-4 block text-papel/85 transition-colors hover:text-papel">
             {sitio.sede && <span class="font-display text-[1.3rem] text-papel">{sitio.sede}</span>}
             {sitio.sede && sitio.direccion && <br />}
             {sitio.direccion && <span class="text-[1rem]">{sitio.direccion}</span>}

@@ -1,4 +1,4 @@
-import sitio from '../data/sitio.json';
+import { sitio } from './sitio';
 
 /** Formatea una fecha como "3 de octubre de 2026". */
 export function formatoFecha(fecha: Date) {
@@ -17,11 +17,14 @@ export function enlaceWhatsApp(mensaje = 'Hola, te escribo desde Carisma Francis
   return `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
 }
 
-/** Enlace de Google Maps para la dirección de la sede. */
-export const enlaceMapa = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  `${sitio.sede}, ${sitio.direccion}`,
-)}`;
+// Lugar para buscar en Maps: solo las partes que sí estén llenas (evita ", " sueltas).
+const lugar = [sitio.sede, sitio.direccion].filter(Boolean).join(', ');
 
-export const mapaEmbed = `https://www.google.com/maps?q=${encodeURIComponent(
-  `${sitio.sede}, ${sitio.direccion}`,
-)}&output=embed`;
+/** Enlace de Google Maps para la dirección de la sede (o null si no hay lugar). */
+export const enlaceMapa = lugar
+  ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(lugar)}`
+  : null;
+
+export const mapaEmbed = lugar
+  ? `https://www.google.com/maps?q=${encodeURIComponent(lugar)}&output=embed`
+  : null;

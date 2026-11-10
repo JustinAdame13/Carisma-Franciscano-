@@ -1,7 +1,7 @@
 ---
 import Tau from './Tau.astro';
 import BotonTema from './BotonTema.astro';
-import sitio from '../data/sitio.json';
+import { sitio } from '../lib/sitio';
 import { navegacion } from '../data/navegacion';
 
 const ruta = Astro.url.pathname.replace(/\/$/, '') || '/';
